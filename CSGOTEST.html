@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSGO开箱模拟器</title>
+    <style>
+        :root {
+            --primary-color: #1a1a2e;
+            --secondary-color: #16213e;
+            --accent-color: #0f3460;
+            --highlight-color: #e94560;
+            --text-color: #f1f1f1;
+            --border-color: #2d4059;
+            --purple-border: #9c27b0;
+            --red-border: #f44336;
+            --orange-border: #ff9800;
+            --rainbow-border: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(15, 52, 96, 0.5) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(233, 69, 96, 0.3) 0%, transparent 20%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--highlight-color);
+            text-shadow: 0 0 10px rgba(233, 69, 96, 0.5);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .balance {
+            background-color: var(--accent-color);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .balance i {
+            color: gold;
+        }
+
+        .nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--highlight-color);
+            transform: translateY(-2px);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .case-section {
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .case-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 22px;
+            color: var(--highlight-color);
+        }
+
+        .case-image {
+            width: 100%;
+            height: 200px;
+            background-color: var(--accent-color);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .case-image img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+
+        .case-image::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+
+        .open-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .open-btn {
+            background: linear-gradient(135deg, var(--highlight-color), #ff6b6b);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .open-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(233, 69, 96, 0.6);
+        }
+
+        .open-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .price {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .items-section {
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: var(--highlight-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .item-card {
+            background-color: var(--accent-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .item-card.purple {
+            border-color: var(--purple-border);
+        }
+
+        .item-card.red {
+            border-color: var(--red-border);
+        }
+
+        .item-card.orange {
+            border-color: var(--orange-border);
+        }
+
+        .item-card.rainbow {
+            border-image: var(--rainbow-border);
+            border-image-slice: 1;
+            animation: rainbowBorder 3s linear infinite;
+        }
+
+        @keyframes rainbowBorder {
+            0% { border-image-source: linear-gradient(0deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000); }
+            100% { border-image-source: linear-gradient(360deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000); }
+        }
+
+        .item-image {
+            width: 100%;
+            height: 100px;
+            background-color: #0a1128;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .item-image img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .item-info {
+            padding: 10px;
+        }
+
+        .item-name {
+            font-size: 14px;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-rarity {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .recent-drops {
+            margin-top: 30px;
+        }
+
+        .drops-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .drop-card {
+            background-color: var(--accent-color);
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .drop-image {
+            width: 60px;
+            height: 60px;
+            background-color: #0a1128;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .drop-image img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .drop-time {
+            font-size: 10px;
+            color: #aaa;
+        }
+
+        .animation-container {
+            height: 150px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .slots-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .slot-track {
+            height: 100px;
+            background-color: #0a1128;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .slot-pointer {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background-color: var(--highlight-color);
+            z-index: 10;
+        }
+
+        .slot-items {
+            display: flex;
+            position: absolute;
+            transition-timing-function: cubic-bezier(0.1, 0.8, 0.2, 1);
+        }
+
+        .slot-item {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .slot-item img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .result-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .result-modal.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .result-content {
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            padding: 30px;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s;
+        }
+
+        .result-modal.show .result-content {
+            transform: scale(1);
+        }
+
+        .result-title {
+            font-size: 24px;
+            color: var(--highlight-color);
+            margin-bottom: 20px;
+        }
+
+        .result-item {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--accent-color);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .result-item img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .result-value {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .result-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .result-btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .result-btn.exchange {
+            background-color: var(--highlight-color);
+            color: white;
+        }
+
+        .result-btn.continue {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            padding: 30px;
+            width: 80%;
+            max-width: 500px;
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--highlight-color);
+        }
+
+        .inventory-items {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .inventory-item {
+            background-color: var(--accent-color);
+            border-radius: 5px;
+            padding: 10px;
+            position: relative;
+        }
+
+        .inventory-item img {
+            width: 100%;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 5px;
+        }
+
+        .inventory-item-name {
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .inventory-item-value {
+            font-size: 11px;
+            color: gold;
+        }
+
+        .inventory-buttons {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .inventory-btn {
+            flex: 1;
+            padding: 3px;
+            font-size: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .inventory-btn.exchange {
+            background-color: var(--highlight-color);
+            color: white;
+        }
+
+        .inventory-btn.withdraw {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .recharge-image {
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            display: block;
+            border-radius: 10px;
+        }
+
+        .recharge-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: var(--accent-color);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            color: var(--text-color);
+        }
+
+        .recharge-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--highlight-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .withdraw-progress {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--accent-color);
+            border-radius: 5px;
+        }
+
+        .progress-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .progress-item:last-child {
+            border-bottom: none;
+        }
+
+        .progress-time {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .progress-cancel {
+            padding: 3px 8px;
+            background-color: var(--highlight-color);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .rarity-indicator {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 10px;
+        }
+
+        .rarity-covert {
+            color: #eb4b4b;
+        }
+
+        .rarity-classified {
+            color: #d32ce6;
+        }
+
+        .rarity-restricted {
+            color: #8847ff;
+        }
+
+        .rarity-mil-spec {
+            color: #4b69ff;
+        }
+
+        .rarity-industrial {
+            color: #5e98d9;
+        }
+
+        .wear {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 10px;
+        }
+
+        .wear-fn {
+            color: #4bce5b;
+        }
+
+        .wear-mw {
+            color: #5e98d9;
+        }
+
+        .wear-ft {
+            color: #b0c3d9;
+        }
+
+        .wear-ww {
+            color: #cba329;
+        }
+
+        .wear-bs {
+            color: #a52a2a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">CSGO开箱模拟器</div>
+            <div class="user-info">
+                <div class="balance">
+                    <i>💰</i>
+                    <span id="balance">0.00</span> 豆
+                </div>
+                <div class="nav">
+                    <button class="nav-btn" id="rechargeBtn">充值</button>
+                    <button class="nav-btn" id="inventoryBtn">仓库</button>
+                    <button class="nav-btn" id="rechargeHistoryBtn">充值记录</button>
+                    <button class="nav-btn" id="openHistoryBtn">开箱记录</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="case-section">
+                <h2 class="case-title">CSGO武器箱</h2>
+                <div class="case-image">
+                    <img src="武器箱.png" alt="武器箱">
+                </div>
+                <div class="slots-container" id="slotsContainer">
+                    <!-- 开箱动画将在这里显示 -->
+                </div>
+                <div class="open-buttons">
+                    <button class="open-btn" id="openOnceBtn">
+                        <span>开箱一次</span>
+                        <span class="price">128.88豆</span>
+                    </button>
+                    <button class="open-btn" id="openFiveBtn">
+                        <span>开箱五次</span>
+                        <span class="price">644.40豆</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="items-section">
+                <h2 class="section-title">可获取物品</h2>
+                <div class="items-grid" id="itemsGrid">
+                    <!-- 物品将在这里动态加载 -->
+                </div>
+
+                <div class="recent-drops">
+                    <h2 class="section-title">最近掉落</h2>
+                    <div class="drops-grid" id="recentDrops">
+                        <!-- 最近掉落将在这里显示 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 开箱结果弹窗 -->
+    <div class="result-modal" id="resultModal">
+        <div class="result-content">
+            <h2 class="result-title">恭喜获得!</h2>
+            <div class="result-item">
+                <img id="resultItemImage" src="" alt="获得的物品">
+            </div>
+            <div class="result-value" id="resultValue">价值: 0.00豆</div>
+            <div class="result-buttons">
+                <button class="result-btn exchange" id="exchangeBtn">置换金额</button>
+                <button class="result-btn continue" id="continueBtn">继续开箱</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 充值弹窗 -->
+    <div class="modal" id="rechargeModal">
+        <div class="modal-content">
+            <button class="modal-close" id="rechargeClose">&times;</button>
+            <h2 class="modal-title">充值</h2>
+            <img src="微信充值.png" alt="微信充值" class="recharge-image">
+            <input type="number" class="recharge-input" id="rechargeAmount" placeholder="输入充值金额(豆)" min="1">
+            <button class="recharge-btn" id="confirmRechargeBtn">确认充值</button>
+        </div>
+    </div>
+
+    <!-- 仓库弹窗 -->
+    <div class="modal" id="inventoryModal">
+        <div class="modal-content">
+            <button class="modal-close" id="inventoryClose">&times;</button>
+            <h2 class="modal-title">我的仓库</h2>
+            <div class="inventory-items" id="inventoryItems">
+                <!-- 仓库物品将在这里动态加载 -->
+            </div>
+            <div class="withdraw-progress" id="withdrawProgress">
+                <h3>正在发送中的物品</h3>
+                <!-- 提货进度将在这里显示 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 充值记录弹窗 -->
+    <div class="modal" id="rechargeHistoryModal">
+        <div class="modal-content">
+            <button class="modal-close" id="rechargeHistoryClose">&times;</button>
+            <h2 class="modal-title">充值记录</h2>
+            <div id="rechargeHistoryList">
+                <!-- 充值记录将在这里动态加载 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 开箱记录弹窗 -->
+    <div class="modal" id="openHistoryModal">
+        <div class="modal-content">
+            <button class="modal-close" id="openHistoryClose">&times;</button>
+            <h2 class="modal-title">开箱记录</h2>
+            <div id="openHistoryList">
+                <!-- 开箱记录将在这里动态加载 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 物品数据
+        const items = [
+            { name: "蝴蝶刀渐变之色", image: "蝴蝶刀渐变之色.jpg", wear: "崭新出场", rarity: "隐秘级", probability: 0.05, value: 3228.47 },
+            { name: "蝴蝶刀自动化", image: "蝴蝶刀自动化.jpg", wear: "略有磨损", rarity: "隐秘级", probability: 0.05, value: 2128.47 },
+            { name: "驾驶手套西装革履", image: "驾驶手套西装革履.jpg", wear: "略有磨损", rarity: "保密级", probability: 0.31, value: 1028.47 },
+            { name: "驾驶手套雪豹", image: "驾驶手套雪豹.jpg", wear: "略有出场", rarity: "保密级", probability: 0.5, value: 828.47 },
+            { name: "锯齿爪刀表面淬火", image: "锯齿爪刀表面淬火.jpg", wear: "略有磨损", rarity: "保密级", probability: 0.6, value: 1028.47 },
+            { name: "锯齿爪刀表面淬火", image: "锯齿爪刀表面淬火.jpg", wear: "久经沙场", rarity: "保密级", probability: 0.39999999, value: 841.5 },
+            { name: "骷髅匕首", image: "骷髅匕首.jpg", wear: "崭新出场", rarity: "保密级", probability: 0.5, value: 1261.51 },
+            { name: "流浪者匕首屠夫", image: "流浪者匕首屠夫.jpg", wear: "崭新出场", rarity: "受限级", probability: 0.19999999, value: 1004.90 },
+            { name: "摩托手套崩", image: "摩托手套崩.jpg", wear: "崭新出场", rarity: "保密级", probability: 0.6999999, value: 2353.03 },
+            { name: "摩托手套崩", image: "摩托手套崩.jpg", wear: "略有磨损", rarity: "保密级", probability: 1.3, value: 930.18 },
+            { name: "咆哮M4", image: "咆哮M4.jpg", wear: "崭新出场", rarity: "隐秘级", probability: 0.01, value: 10380.37 },
+            { name: "咆哮M4", image: "咆哮M4.jpg", wear: "略有磨损", rarity: "隐秘级", probability: 0.08, value: 7133.96 },
+            { name: "咆哮M4", image: "咆哮M4.jpg", wear: "崭新出场", rarity: "隐秘级", probability: 0.6999999, value: 9276.07 },
+            { name: "咆哮M4", image: "咆哮M4.jpg", wear: "略有磨损", rarity: "隐秘级", probability: 1.3, value: 2836.32 },
+            { name: "运动手套迈阿密风云", image: "运动手套迈阿密风云.jpg", wear: "崭新出场", rarity: "隐秘级", probability: 0.001, value: 31058.99 },
+            { name: "运动手套迈阿密风云", image: "运动手套迈阿密风云.jpg", wear: "略有磨损", rarity: "隐秘级", probability: 0.1, value: 6139.32 },
+            { name: "运动手套潘多拉", image: "运动手套潘多拉.jpg", wear: "久经沙场", rarity: "隐秘级", probability: 0.015, value: 13938.03 },
+            { name: "运动手套潘多拉", image: "运动手套潘多拉.jpg", wear: "略有磨损", rarity: "隐秘级", probability: 0.001, value: 18883.30 },
+            { name: "运动手套树篱迷宫", image: "运动手套树篱迷宫.jpg", wear: "崭新出场", rarity: "隐秘级", probability: 0.0001, value: 79110.23 },
+            { name: "运动手套树篱迷宫", image: "运动手套树篱迷宫.jpg", wear: "略有磨损", rarity: "隐秘级", probability: 0.001, value: 27892.38 },
+            { name: "运动手套双硒", image: "运动手套双硒.jpg", wear: "久经沙场", rarity: "保密级", probability: 0.6, value: 1178.06 },
+            { name: "运动手套双硒", image: "运动手套双硒.jpg", wear: "略有磨损", rarity: "隐秘级", probability: 0.139999, value: 27892.38 },
+            { name: "爪子刀传说", image: "爪子刀传说.jpg", wear: "久经沙场", rarity: "保密级", probability: 0.3, value: 1616.48 },
+            { name: "爪子刀多普勒（红宝石）", image: "爪子刀多普勒（红宝石）.jpg", wear: "久经沙场", rarity: "隐秘级", probability: 0.001, value: 15901.83 },
+            { name: "专业手套渐变之色", image: "专业手套渐变之色.jpg", wear: "略有磨损", rarity: "保密级", probability: 0.4, value: 1817.8 },
+            { name: "专业手套深红和服", image: "专业手套深红和服.jpg", wear: "略有磨损", rarity: "隐秘级", probability: 0.0239999, value: 12133.07 },
+            { name: "专业手套深红之王", image: "专业手套深红之王.jpg", wear: "略有磨损", rarity: "保密级", probability: 0.67, value: 1000.18 },
+            { name: "AK47暗影破坏者", image: "AK47暗影破坏者.jpg", wear: "略有磨损", rarity: "军规级", probability: 15.0000001, value: 8.38 },
+            { name: "蝴蝶刀虎牙", image: "蝴蝶刀虎牙.jpg", wear: "崭新出场", rarity: "保密级", probability: 0.123, value: 1850.32 },
+            { name: "AK47黄金藤曼", image: "AK47黄金藤曼.jpg", wear: "略有磨损", rarity: "隐秘级", probability: 0.042, value: 4498.76 },
+            { name: "AK47可燃冰", image: "AK47可燃冰.jpg", wear: "略有磨损", rarity: "军规级", probability: 10, value: 14.49 },
+            { name: "AK47莫言", image: "AK47莫言.jpg", wear: "略有磨损", rarity: "军规级", probability: 10, value: 8.51 },
+            { name: "K47水栽竹", image: "K47水栽竹.jpg", wear: "崭新出场", rarity: "受限级", probability: 0.15, value: 5136.20 },
+            { name: "AK47野合", image: "AK47野合.jpg", wear: "崭新出场", rarity: "隐秘级", probability: 0.002, value: 21741.04 },
+            { name: "AWP雷击", image: "AWP雷击.jpg", wear: "崭新出场", rarity: "保密级", probability: 0.88888899, value: 876.42 },
+            { name: "AWP巨龙传说", image: "AWP巨龙传说.jpg", wear: "崭新出场", rarity: "隐秘级", probability: 0.002, value: 20821.71 },
+            { name: "AWP永恒之枪", image: "AWP永恒之枪.jpg", wear: "崭新出场", rarity: "隐秘级", probability: 0.002, value: 21119.88 },
+            { name: "M4A1氮化处理", image: "M4A1氮化处理.jpg", wear: "崭新出场", rarity: "军规级", probability: 10, value: 7.12 },
+            { name: "M4A1伊卡洛斯的陨落", image: "M4A1伊卡洛斯的陨落.jpg", wear: "崭新出场", rarity: "保密级", probability: 0.5, value: 817.63 },
+            { name: "M4A4死寂空间", image: "M4A4死寂空间.jpg", wear: "久经沙场", rarity: "军规级", probability: 10, value: 12.59 },
+            { name: "M9刺刀多普勒（红宝石）", image: "M9刺刀多普勒（红宝石）.jpg", wear: "崭新出场", rarity: "隐秘级", probability: 0.001, value: 19504.22 },
+            { name: "M9刺刀渐变大理石", image: "M9刺刀渐变大理石.jpg", wear: "崭新出场", rarity: "受限级", probability: 0.15, value: 2220.78 },
+            { name: "M9刺刀外表生锈", image: "M9刺刀外表生锈.jpg", wear: "战痕累累", rarity: "受限级", probability: 0.25, value: 789.57 },
+            { name: "M9刺刀自动化", image: "M9刺刀自动化.jpg", wear: "久经沙场", rarity: "保密级", probability: 0.3, value: 1717.77 },
+            { name: "USP不锈钢", image: "USP不锈钢.jpg", wear: "久经沙场", rarity: "军规级", probability: 10, value: 8.59 },
+            { name: "USP蓝图", image: "USP蓝图.jpg", wear: "久经沙场", rarity: "军规级", probability: 15, value: 5.60 },
+            { name: "刺刀", image: "刺刀.jpg", wear: "崭新出场", rarity: "保密级", probability: 0.4, value: 850.82 },
+            { name: "刺刀多普勒", image: "刺刀多普勒.jpg", wear: "崭新出场", rarity: "保密级", probability: 0.69999999, value: 1005.09 },
+            { name: "刺刀虎牙", image: "刺刀虎牙.jpg", wear: "崭新出场", rarity: "保密级", probability: 0.7000001, value: 850.32 },
+            { name: "格洛克水灵", image: "格洛克水灵.jpg", wear: "崭新出场", rarity: "军规级", probability: 10.0000001, value: 8.73 },
+            { name: "蝴蝶刀都市伪装", image: "蝴蝶刀都市伪装.jpg", wear: "久经沙场", rarity: "保密级", probability: 0.5, value: 990.60 },
+            { name: "蝴蝶刀多普勒（红宝石）", image: "蝴蝶刀多普勒（红宝石）.jpg", wear: "崭新出场", rarity: "隐秘级", probability: 0.001, value: 20705.43 },
+            { name: "蝴蝶刀多普勒", image: "蝴蝶刀多普勒.jpg", wear: "崭新出场", rarity: "隐秘级", probability: 0.008, value: 5519.62 }
+        ];
+
+        // 用户数据
+        let userData = {
+            balance: 0,
+            inventory: [],
+            withdrawItems: [],
+            rechargeHistory: [],
+            openHistory: [],
+            recentDrops: []
+        };
+
+        // 从本地存储加载用户数据
+        function loadUserData() {
+            const savedData = localStorage.getItem('csgoCaseUserData');
+            if (savedData) {
+                userData = JSON.parse(savedData);
+                updateBalance();
+                updateRecentDrops();
+            }
+        }
+
+        // 保存用户数据到本地存储
+        function saveUserData() {
+            localStorage.setItem('csgoCaseUserData', JSON.stringify(userData));
+        }
+
+        // 更新余额显示
+        function updateBalance() {
+            document.getElementById('balance').textContent = userData.balance.toFixed(2);
+        }
+
+        // 更新最近掉落显示
+        function updateRecentDrops() {
+            const recentDropsContainer = document.getElementById('recentDrops');
+            recentDropsContainer.innerHTML = '';
+            
+            userData.recentDrops.slice(0, 8).forEach(drop => {
+                const dropCard = document.createElement('div');
+                dropCard.className = 'drop-card';
+                
+                const dropImage = document.createElement('div');
+                dropImage.className = 'drop-image';
+                const img = document.createElement('img');
+                img.src = drop.image;
+                img.alt = drop.name;
+                dropImage.appendChild(img);
+                
+                const dropTime = document.createElement('div');
+                dropTime.className = 'drop-time';
+                dropTime.textContent = `${drop.time}前`;
+                
+                dropCard.appendChild(dropImage);
+                dropCard.appendChild(dropTime);
+                recentDropsContainer.appendChild(dropCard);
+            });
+        }
+
+        // 初始化可获取物品网格
+        function initItemsGrid() {
+            const itemsGrid = document.getElementById('itemsGrid');
+            
+            // 按价值排序
+            const sortedItems = [...items].sort((a, b) => b.value - a.value);
+            
+            sortedItems.slice(0, 9).forEach(item => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card';
+                
+                // 根据价值添加边框类
+                if (item.value > 2000) {
+                    itemCard.classList.add('rainbow');
+                } else if (item.value > 1500) {
+                    itemCard.classList.add('orange');
+                } else if (item.value > 1000) {
+                    itemCard.classList.add('red');
+                } else if (item.value > 500) {
+                    itemCard.classList.add('purple');
+                }
+                
+                const itemImage = document.createElement('div');
+                itemImage.className = 'item-image';
+                const img = document.createElement('img');
+                img.src = item.image;
+                img.alt = item.name;
+                itemImage.appendChild(img);
+                
+                const itemInfo = document.createElement('div');
+                itemInfo.className = 'item-info';
+                
+                const itemName = document.createElement('div');
+                itemName.className = 'item-name';
+                itemName.textContent = item.name;
+                
+                const itemRarity = document.createElement('div');
+                itemRarity.className = 'item-rarity';
+                itemRarity.textContent = `${item.rarity} | ${item.value.toFixed(2)}豆`;
+                
+                itemInfo.appendChild(itemName);
+                itemInfo.appendChild(itemRarity);
+                
+                itemCard.appendChild(itemImage);
+                itemCard.appendChild(itemInfo);
+                
+                itemsGrid.appendChild(itemCard);
+            });
+        }
+
+        // 随机选择一个物品
+        function getRandomItem() {
+            const random = Math.random() * 100;
+            let cumulativeProbability = 0;
+            
+            for (const item of items) {
+                cumulativeProbability += item.probability;
+                if (random <= cumulativeProbability) {
+                    return {...item};
+                }
+            }
+            
+            // 如果由于概率总和不是100%而没选中任何物品，返回最后一个
+            return {...items[items.length - 1]};
+        }
+
+        // 开箱一次
+        function openCaseOnce() {
+            if (userData.balance < 128.88) {
+                alert('余额不足，请充值！');
+                return;
+            }
+            
+            userData.balance -= 128.88;
+            updateBalance();
+            saveUserData();
+            
+            const item = getRandomItem();
+            
+            // 添加到仓库
+            userData.inventory.push({
+                ...item,
+                id: Date.now(),
+                date: new Date().toLocaleString()
+            });
+            
+            // 添加到开箱记录
+            userData.openHistory.unshift({
+                item: item.name,
+                value: item.value,
+                date: new Date().toLocaleString()
+            });
+            
+            // 如果价值大于1000，添加到最近掉落
+            if (item.value > 1000) {
+                userData.recentDrops.unshift({
+                    ...item,
+                    time: '刚刚'
+                });
+                
+                // 更新掉落时间
+                setTimeout(() => {
+                    updateDropTimes();
+                }, 60000); // 每分钟更新一次时间
+            }
+            
+            saveUserData();
+            updateRecentDrops();
+            
+            return item;
+        }
+
+        // 开箱五次
+        function openCaseFive() {
+            if (userData.balance < 644.40) {
+                alert('余额不足，请充值！');
+                return;
+            }
+            
+            userData.balance -= 644.40;
+            updateBalance();
+            saveUserData();
+            
+            const results = [];
+            for (let i = 0; i < 5; i++) {
+                const item = getRandomItem();
+                results.push(item);
+                
+                // 添加到仓库
+                userData.inventory.push({
+                    ...item,
+                    id: Date.now() + i,
+                    date: new Date().toLocaleString()
+                });
+                
+                // 添加到开箱记录
+                userData.openHistory.unshift({
+                    item: item.name,
+                    value: item.value,
+                    date: new Date().toLocaleString()
+                });
+                
+                // 如果价值大于1000，添加到最近掉落
+                if (item.value > 1000) {
+                    userData.recentDrops.unshift({
+                        ...item,
+                        time: '刚刚'
+                    });
+                }
+            }
+            
+            saveUserData();
+            updateRecentDrops();
+            
+            // 更新掉落时间
+            setTimeout(() => {
+                updateDropTimes();
+            }, 60000);
+            
+            return results;
+        }
+
+        // 更新掉落时间显示
+        function updateDropTimes() {
+            const now = new Date();
+            userData.recentDrops.forEach(drop => {
+                if (drop.time === '刚刚') {
+                    drop.time = '1分钟';
+                } else {
+                    const minutes = parseInt(drop.time);
+                    if (!isNaN(minutes)) {
+                        drop.time = `${minutes + 1}分钟`;
+                    }
+                }
+            });
+            
+            saveUserData();
+            updateRecentDrops();
+        }
+
+        // 显示开箱结果
+        function showResult(item) {
+            const modal = document.getElementById('resultModal');
+            const itemImage = document.getElementById('resultItemImage');
+            const resultValue = document.getElementById('resultValue');
+            
+            itemImage.src = item.image;
+            itemImage.alt = item.name;
+            resultValue.textContent = `价值: ${item.value.toFixed(2)}豆`;
+            
+            modal.classList.add('show');
+            
+            // 设置按钮事件
+            document.getElementById('exchangeBtn').onclick = function() {
+                exchangeItem(item);
+                modal.classList.remove('show');
+            };
+            
+            document.getElementById('continueBtn').onclick = function() {
+                modal.classList.remove('show');
+            };
+        }
+
+        // 置换物品
+        function exchangeItem(item) {
+            // 找到仓库中对应的物品
+            const itemIndex = userData.inventory.findIndex(i => i.id === item.id);
+            if (itemIndex !== -1) {
+                userData.inventory.splice(itemIndex, 1);
+                userData.balance += item.value;
+                updateBalance();
+                saveUserData();
+                alert(`成功置换 ${item.name}，获得 ${item.value.toFixed(2)}豆`);
+            }
+        }
+
+        // 提货物品
+        function withdrawItem(itemId) {
+            const itemIndex = userData.inventory.findIndex(i => i.id === itemId);
+            if (itemIndex !== -1) {
+                const item = userData.inventory[itemIndex];
+                userData.inventory.splice(itemIndex, 1);
+                
+                const withdrawItem = {
+                    ...item,
+                    withdrawTime: new Date(),
+                    status: '处理中',
+                    timer: setTimeout(() => {
+                        completeWithdraw(item.id);
+                    }, 10 * 60 * 1000) // 10分钟
+                };
+                
+                userData.withdrawItems.push(withdrawItem);
+                saveUserData();
+                updateInventoryModal();
+                
+                alert(`已开始处理 ${item.name} 的提货请求，将在10分钟后完成`);
+            }
+        }
+
+        // 完成提货
+        function completeWithdraw(itemId) {
+            const itemIndex = userData.withdrawItems.findIndex(i => i.id === itemId);
+            if (itemIndex !== -1) {
+                userData.withdrawItems[itemIndex].status = '已完成';
+                saveUserData();
+                updateInventoryModal();
+            }
+        }
+
+        // 取消提货
+        function cancelWithdraw(itemId) {
+            const itemIndex = userData.withdrawItems.findIndex(i => i.id === itemId);
+            if (itemIndex !== -1) {
+                const item = userData.withdrawItems[itemIndex];
+                clearTimeout(item.timer);
+                
+                userData.withdrawItems.splice(itemIndex, 1);
+                userData.inventory.push(item);
+                saveUserData();
+                updateInventoryModal();
+                
+                alert(`已取消 ${item.name} 的提货请求`);
+            }
+        }
+
+        // 更新仓库弹窗
+        function updateInventoryModal() {
+            const inventoryItems = document.getElementById('inventoryItems');
+            inventoryItems.innerHTML = '';
+            
+            userData.inventory.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'inventory-item';
+                
+                // 根据价值添加边框类
+                if (item.value > 2000) {
+                    itemElement.classList.add('rainbow');
+                } else if (item.value > 1500) {
+                    itemElement.classList.add('orange');
+                } else if (item.value > 1000) {
+                    itemElement.classList.add('red');
+                } else if (item.value > 500) {
+                    itemElement.classList.add('purple');
+                }
+                
+                const img = document.createElement('img');
+                img.src = item.image;
+                img.alt = item.name;
+                
+                const rarity = document.createElement('div');
+                rarity.className = `rarity-indicator rarity-${getRarityClass(item.rarity)}`;
+                rarity.textContent = item.rarity;
+                
+                const wear = document.createElement('div');
+                wear.className = `wear wear-${getWearClass(item.wear)}`;
+                wear.textContent = item.wear;
+                
+                const name = document.createElement('div');
+                name.className = 'inventory-item-name';
+                name.textContent = item.name;
+                
+                const value = document.createElement('div');
+                value.className = 'inventory-item-value';
+                value.textContent = `${item.value.toFixed(2)}豆`;
+                
+                const buttons = document.createElement('div');
+                buttons.className = 'inventory-buttons';
+                
+                const exchangeBtn = document.createElement('button');
+                exchangeBtn.className = 'inventory-btn exchange';
+                exchangeBtn.textContent = '置换';
+                exchangeBtn.onclick = () => {
+                    exchangeItem(item);
+                    updateInventoryModal();
+                };
+                
+                const withdrawBtn = document.createElement('button');
+                withdrawBtn.className = 'inventory-btn withdraw';
+                withdrawBtn.textContent = '提货';
+                withdrawBtn.onclick = () => {
+                    withdrawItem(item.id);
+                };
+                
+                buttons.appendChild(exchangeBtn);
+                buttons.appendChild(withdrawBtn);
+                
+                itemElement.appendChild(img);
+                itemElement.appendChild(rarity);
+                itemElement.appendChild(wear);
+                itemElement.appendChild(name);
+                itemElement.appendChild(value);
+                itemElement.appendChild(buttons);
+                
+                inventoryItems.appendChild(itemElement);
+            });
+            
+            // 更新提货进度
+            const withdrawProgress = document.getElementById('withdrawProgress');
+            withdrawProgress.innerHTML = '<h3>正在发送中的物品</h3>';
+            
+            if (userData.withdrawItems.length === 0) {
+                const empty = document.createElement('p');
+                empty.textContent = '没有正在发送的物品';
+                withdrawProgress.appendChild(empty);
+            } else {
+                userData.withdrawItems.forEach(item => {
+                    const progressItem = document.createElement('div');
+                    progressItem.className = 'progress-item';
+                    
+                    const itemInfo = document.createElement('div');
+                    itemInfo.textContent = `${item.name} (${item.value.toFixed(2)}豆) - ${item.status}`;
+                    
+                    const timeLeft = document.createElement('div');
+                    timeLeft.className = 'progress-time';
+                    
+                    if (item.status === '处理中') {
+                        const elapsed = new Date() - new Date(item.withdrawTime);
+                        const remaining = 10 * 60 * 1000 - elapsed;
+                        const minutes = Math.floor(remaining / (60 * 1000));
+                        const seconds = Math.floor((remaining % (60 * 1000)) / 1000);
+                        timeLeft.textContent = `${minutes}分${seconds}秒`;
+                        
+                        // 每秒更新一次时间
+                        const timer = setInterval(() => {
+                            const elapsed = new Date() - new Date(item.withdrawTime);
+                            const remaining = 10 * 60 * 1000 - elapsed;
+                            
+                            if (remaining <= 0) {
+                                clearInterval(timer);
+                                timeLeft.textContent = '已完成';
+                            } else {
+                                const minutes = Math.floor(remaining / (60 * 1000));
+                                const seconds = Math.floor((remaining % (60 * 1000)) / 1000);
+                                timeLeft.textContent = `${minutes}分${seconds}秒`;
+                            }
+                        }, 1000);
+                    } else {
+                        timeLeft.textContent = '已完成';
+                    }
+                    
+                    const cancelBtn = document.createElement('button');
+                    cancelBtn.className = 'progress-cancel';
+                    cancelBtn.textContent = '取消';
+                    cancelBtn.onclick = () => {
+                        cancelWithdraw(item.id);
+                    };
+                    
+                    if (item.status === '已完成') {
+                        cancelBtn.style.display = 'none';
+                    }
+                    
+                    progressItem.appendChild(itemInfo);
+                    progressItem.appendChild(timeLeft);
+                    progressItem.appendChild(cancelBtn);
+                    
+                    withdrawProgress.appendChild(progressItem);
+                });
+            }
+        }
+
+        // 获取稀有度类名
+        function getRarityClass(rarity) {
+            switch (rarity) {
+                case '隐秘级': return 'covert';
+                case '保密级': return 'classified';
+                case '受限级': return 'restricted';
+                case '军规级': return 'mil-spec';
+                default: return 'industrial';
+            }
+        }
+
+        // 获取磨损类名
+        function getWearClass(wear) {
+            if (wear.includes('崭新')) return 'fn';
+            if (wear.includes('略有')) return 'mw';
+            if (wear.includes('久经')) return 'ft';
+            if (wear.includes('破损')) return 'ww';
+            if (wear.includes('战痕')) return 'bs';
+            return 'fn';
+        }
+
+        // 更新充值记录弹窗
+        function updateRechargeHistoryModal() {
+            const historyList = document.getElementById('rechargeHistoryList');
+            historyList.innerHTML = '';
+            
+            if (userData.rechargeHistory.length === 0) {
+                const empty = document.createElement('p');
+                empty.textContent = '没有充值记录';
+                historyList.appendChild(empty);
+            } else {
+                userData.rechargeHistory.forEach(record => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    
+                    const date = document.createElement('div');
+                    date.textContent = record.date;
+                    
+                    const amount = document.createElement('div');
+                    amount.textContent = `+${record.amount.toFixed(2)}豆`;
+                    amount.style.color = '#4CAF50';
+                    
+                    historyItem.appendChild(date);
+                    historyItem.appendChild(amount);
+                    
+                    historyList.appendChild(historyItem);
+                });
+            }
+        }
+
+        // 更新开箱记录弹窗
+        function updateOpenHistoryModal() {
+            const historyList = document.getElementById('openHistoryList');
+            historyList.innerHTML = '';
+            
+            if (userData.openHistory.length === 0) {
+                const empty = document.createElement('p');
+                empty.textContent = '没有开箱记录';
+                historyList.appendChild(empty);
+            } else {
+                userData.openHistory.forEach(record => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    
+                    const item = document.createElement('div');
+                    item.textContent = record.item;
+                    
+                    const info = document.createElement('div');
+                    info.textContent = `${record.value.toFixed(2)}豆 - ${record.date}`;
+                    
+                    historyItem.appendChild(item);
+                    historyItem.appendChild(info);
+                    
+                    historyList.appendChild(historyItem);
+                });
+            }
+        }
+
+        // 创建开箱动画
+        function createSlotAnimation(count = 1) {
+            const container = document.getElementById('slotsContainer');
+            container.innerHTML = '';
+            
+            const slots = [];
+            
+            for (let i = 0; i < count; i++) {
+                const slotTrack = document.createElement('div');
+                slotTrack.className = 'slot-track';
+                
+                const pointer = document.createElement('div');
+                pointer.className = 'slot-pointer';
+                
+                const slotItems = document.createElement('div');
+                slotItems.className = 'slot-items';
+                
+                // 添加物品到滚轮
+                for (let j = 0; j < 30; j++) {
+                    const randomItem = items[Math.floor(Math.random() * items.length)];
+                    const slotItem = document.createElement('div');
+                    slotItem.className = 'slot-item';
+                    
+                    const img = document.createElement('img');
+                    img.src = randomItem.image;
+                    img.alt = randomItem.name;
+                    
+                    slotItem.appendChild(img);
+                    slotItems.appendChild(slotItem);
+                }
+                
+                slotTrack.appendChild(pointer);
+                slotTrack.appendChild(slotItems);
+                container.appendChild(slotTrack);
+                
+                slots.push({
+                    element: slotItems,
+                    position: 0,
+                    speed: 0,
+                    target: Math.floor(Math.random() * items.length),
+                    stopped: false
+                });
+            }
+            
+            return slots;
+        }
+
+        // 运行动画
+        function runSlotAnimation(slots, results, callback) {
+            let runningSlots = slots.length;
+            const startTimes = slots.map((_, i) => i * 500); // 每个槽延迟0.5秒
+            
+            slots.forEach((slot, index) => {
+                setTimeout(() => {
+                    const startTime = Date.now();
+                    let lastTime = startTime;
+                    
+                    function animate() {
+                        const now = Date.now();
+                        const deltaTime = now - lastTime;
+                        lastTime = now;
+                        
+                        const elapsed = now - startTime;
+                        
+                        // 加速阶段 (0-1秒)
+                        if (elapsed < 1000) {
+                            slot.speed = Math.min(30, slot.speed + deltaTime * 0.05);
+                        } 
+                        // 减速阶段 (3秒后)
+                        else if (elapsed > 3000) {
+                            const slowdownProgress = Math.min(1, (elapsed - 3000) / 2000);
+                            slot.speed = 30 * (1 - slowdownProgress);
+                            
+                            // 停止条件
+                            if (slowdownProgress >= 1) {
+                                slot.speed = 0;
+                                slot.stopped = true;
+                                runningSlots--;
+                                
+                                // 所有槽都停止后执行回调
+                                if (runningSlots === 0 && callback) {
+                                    setTimeout(callback, 500);
+                                }
+                                return;
+                            }
+                        }
+                        
+                        slot.position += slot.speed;
+                        slot.element.style.transform = `translateX(-${slot.position % (items.length * 100)}px)`;
+                        
+                        if (!slot.stopped) {
+                            requestAnimationFrame(animate);
+                        }
+                    }
+                    
+                    animate();
+                    
+                    // 设置目标位置
+                    setTimeout(() => {
+                        const targetItem = items.findIndex(item => 
+                            item.name === results[index].name && 
+                            item.wear === results[index].wear
+                        );
+                        
+                        if (targetItem !== -1) {
+                            slot.target = targetItem * 100;
+                        }
+                    }, 1500);
+                    
+                }, startTimes[index]);
+            });
+        }
+
+        // 初始化事件监听
+        function initEventListeners() {
+            // 充值按钮
+            document.getElementById('rechargeBtn').addEventListener('click', () => {
+                document.getElementById('rechargeModal').classList.add('show');
+            });
+            
+            // 关闭充值弹窗
+            document.getElementById('rechargeClose').addEventListener('click', () => {
+                document.getElementById('rechargeModal').classList.remove('show');
+            });
+            
+            // 确认充值
+            document.getElementById('confirmRechargeBtn').addEventListener('click', () => {
+                const amount = parseFloat(document.getElementById('rechargeAmount').value);
+                if (isNaN(amount) || amount <= 0) {
+                    alert('请输入有效的充值金额');
+                    return;
+                }
+                
+                userData.balance += amount;
+                userData.rechargeHistory.unshift({
+                    amount: amount,
+                    date: new Date().toLocaleString()
+                });
+                
+                updateBalance();
+                saveUserData();
+                document.getElementById('rechargeModal').classList.remove('show');
+                document.getElementById('rechargeAmount').value = '';
+                
+                alert(`成功充值 ${amount.toFixed(2)}豆`);
+            });
+            
+            // 仓库按钮
+            document.getElementById('inventoryBtn').addEventListener('click', () => {
+                updateInventoryModal();
+                document.getElementById('inventoryModal').classList.add('show');
+            });
+            
+            // 关闭仓库弹窗
+            document.getElementById('inventoryClose').addEventListener('click', () => {
+                document.getElementById('inventoryModal').classList.remove('show');
+            });
+            
+            // 充值记录按钮
+            document.getElementById('rechargeHistoryBtn').addEventListener('click', () => {
+                updateRechargeHistoryModal();
+                document.getElementById('rechargeHistoryModal').classList.add('show');
+            });
+            
+            // 关闭充值记录弹窗
+            document.getElementById('rechargeHistoryClose').addEventListener('click', () => {
+                document.getElementById('rechargeHistoryModal').classList.remove('show');
+            });
+            
+            // 开箱记录按钮
+            document.getElementById('openHistoryBtn').addEventListener('click', () => {
+                updateOpenHistoryModal();
+                document.getElementById('openHistoryModal').classList.add('show');
+            });
+            
+            // 关闭开箱记录弹窗
+            document.getElementById('openHistoryClose').addEventListener('click', () => {
+                document.getElementById('openHistoryModal').classList.remove('show');
+            });
+            
+            // 开箱一次按钮
+            document.getElementById('openOnceBtn').addEventListener('click', () => {
+                const result = openCaseOnce();
+                const slots = createSlotAnimation(1);
+                
+                document.getElementById('openOnceBtn').disabled = true;
+                document.getElementById('openFiveBtn').disabled = true;
+                
+                runSlotAnimation(slots, [result], () => {
+                    document.getElementById('openOnceBtn').disabled = false;
+                    document.getElementById('openFiveBtn').disabled = false;
+                    showResult(result);
+                });
+            });
+            
+            // 开箱五次按钮
+            document.getElementById('openFiveBtn').addEventListener('click', () => {
+                const results = openCaseFive();
+                const slots = createSlotAnimation(5);
+                
+                document.getElementById('openOnceBtn').disabled = true;
+                document.getElementById('openFiveBtn').disabled = true;
+                
+                runSlotAnimation(slots, results, () => {
+                    document.getElementById('openOnceBtn').disabled = false;
+                    document.getElementById('openFiveBtn').disabled = false;
+                    
+                    // 显示最后一个结果
+                    showResult(results[results.length - 1]);
+                });
+            });
+        }
+
+        // 初始化
+        function init() {
+            loadUserData();
+            initItemsGrid();
+            initEventListeners();
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

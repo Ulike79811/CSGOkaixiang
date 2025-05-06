@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSGO风格武器箱开箱</title>
+    <style>
+        :root {
+            --purple-border: #9c27b0;
+            --red-border: #f44336;
+            --orange-border: #ff9800;
+            --rainbow-border: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1a1a1a;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .header {
+            background-color: #121212;
+            padding: 15px 0;
+            border-bottom: 2px solid #333;
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff9800;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .balance {
+            background-color: #333;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .recharge-btn {
+            background-color: #ff9800;
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .main-content {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .case-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+        
+        .case-container {
+            width: 65%;
+            background-color: #252525;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .case-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #ff9800;
+        }
+        
+        .case-image {
+            width: 100%;
+            height: 200px;
+            background-color: #333;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('https://via.placeholder.com/800x400/333/666?text=高级武器箱');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .open-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .open-btn {
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .open-btn:hover {
+            background-color: #e64a19;
+            transform: scale(1.05);
+        }
+        
+        .price-tag {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .items-section {
+            width: 30%;
+            background-color: #252525;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #ff9800;
+        }
+        
+        .recent-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .recent-item {
+            width: calc(25% - 10px);
+            aspect-ratio: 1;
+            background-color: #333;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .item-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 2px 5px;
+            font-size: 10px;
+            border-radius: 3px;
+        }
+        
+        .item-time {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            font-size: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        .inventory-btn {
+            display: block;
+            background-color: #2196f3;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        /* 商品展示样式 */
+        .items-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .item-card {
+            background-color: #333;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .item-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .item-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background-color: #444;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .item-name {
+            padding: 8px;
+            font-size: 14px;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .item-value {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        
+        .item-wear {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 10px;
+        }
+        
+        /* 边框颜色类 */
+        .border-purple {
+            border: 2px solid var(--purple-border);
+        }
+        
+        .border-red {
+            border: 2px solid var(--red-border);
+        }
+        
+        .border-orange {
+            border: 2px solid var(--orange-border);
+        }
+        
+        .border-rainbow {
+            border: 2px solid;
+            border-image: var(--rainbow-border);
+            border-image-slice: 1;
+        }
+        
+        /* 开箱动画容器 */
+        .animation-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .animation-box {
+            width: 80%;
+            max-width: 800px;
+            height: 200px;
+            position: relative;
+        }
+        
+        .item-scroll {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .scroll-item {
+            min-width: 200px;
+            height: 100%;
+            background-color: #444;
+            margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .pointer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 2px;
+            height: 100%;
+            background-color: red;
+            z-index: 10;
+        }
+        
+        /* 充值模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: #252525;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #ff9800;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            border: 1px solid #444;
+            border-radius: 5px;
+            color: white;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .confirm-btn {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .cancel-btn {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .qr-code {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .qr-code img {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+        
+        /* 仓库页面样式 */
+        .inventory-container {
+            background-color: #252525;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .inventory-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .decompose-btn {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .withdraw-btn {
+            background-color: #2196f3;
+            color: white;
+        }
+        
+        /* 历史记录样式 */
+        .history-tabs {
+            display: flex;
+            border-bottom: 1px solid #444;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom: 2px solid #ff9800;
+            color: #ff9800;
+        }
+        
+        .history-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            padding: 15px;
+            background-color: #333;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .case-section {
+                flex-direction: column;
+            }
+            
+            .case-container, .items-section {
+                width: 100%;
+            }
+            
+            .items-section {
+                margin-top: 20px;
+            }
+            
+            .items-showcase {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="nav">
+            <div class="logo">CSGO开箱模拟</div>
+            <div class="user-info">
+                <div class="balance">余额: <span id="user-balance">0</span> 豆</div>
+                <button class="recharge-btn" id="recharge-btn">充值</button>
+                <a href="#" class="inventory-btn" id="inventory-btn">我的仓库</a>
+                <a href="#" class="inventory-btn" id="history-btn">历史记录</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="case-section">
+            <div class="case-container">
+                <h2 class="case-title">高级武器箱</h2>
+                <div class="case-image">
+                    <div class="price-tag">128.88 豆/次</div>
+                </div>
+                <div class="open-buttons">
+                    <button class="open-btn" id="open-once">开箱一次</button>
+                    <button class="open-btn" id="open-five">开箱五次</button>
+                </div>
+            </div>
+            
+            <div class="items-section">
+                <h3 class="section-title">最近出货</h3>
+                <div class="recent-items" id="recent-items">
+                    <!-- 动态生成最近出货 -->
+                </div>
+                <a href="#" class="inventory-btn">查看全部</a>
+            </div>
+        </div>
+        
+        <h2 class="section-title">武器箱内容</h2>
+        <div class="items-showcase" id="items-showcase">
+            <!-- 动态生成商品展示 -->
+        </div>
+    </div>
+    
+    <!-- 开箱动画 -->
+    <div class="animation-container" id="animation-container">
+        <div class="animation-box">
+            <div class="item-scroll" id="item-scroll">
+                <!-- 动态生成滚动项目 -->
+            </div>
+            <div class="pointer"></div>
+        </div>
+    </div>
+    
+    <!-- 充值模态框 -->
+    <div class="modal" id="recharge-modal">
+        <div class="modal-content">
+            <h3 class="modal-title">充值</h3>
+            <div class="input-group">
+                <label for="recharge-amount">充值金额 (豆)</label>
+                <input type="number" id="recharge-amount" min="1" placeholder="输入要充值的金额">
+            </div>
+            <div class="qr-code" id="qr-code">
+                <img src="微信充值.png" alt="微信充值二维码">
+                <div class="modal-buttons">
+                    <button class="modal-btn confirm-btn" id="paid-btn">我已支付</button>
+                    <button class="modal-btn cancel-btn" id="problem-btn">遇到问题</button>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn confirm-btn" id="confirm-recharge">确认充值</button>
+                <button class="modal-btn cancel-btn" id="cancel-recharge">取消</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 中奖结果模态框 -->
+    <div class="modal" id="result-modal">
+        <div class="modal-content">
+            <h3 class="modal-title">恭喜获得!</h3>
+            <div class="item-image" id="result-item" style="height: 200px;">
+                <!-- 中奖商品展示 -->
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn confirm-btn" id="exchange-btn">置换等价金额</button>
+                <button class="modal-btn cancel-btn" id="continue-btn">继续抽奖</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 仓库模态框 -->
+    <div class="modal" id="inventory-modal">
+        <div class="modal-content">
+            <h3 class="modal-title">我的仓库</h3>
+            <div class="inventory-container" id="inventory-list">
+                <!-- 动态生成仓库物品 -->
+            </div>
+            <div class="inventory-actions">
+                <button class="action-btn decompose-btn" id="decompose-btn">一键分解</button>
+                <button class="action-btn withdraw-btn" id="withdraw-btn">提货</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 历史记录模态框 -->
+    <div class="modal" id="history-modal">
+        <div class="modal-content">
+            <h3 class="modal-title">历史记录</h3>
+            <div class="history-tabs">
+                <div class="tab active" data-tab="recharge">充值记录</div>
+                <div class="tab" data-tab="open">开箱记录</div>
+            </div>
+            <div class="history-list" id="history-list">
+                <!-- 动态生成历史记录 -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- 发货进度模态框 -->
+    <div class="modal" id="shipping-modal">
+        <div class="modal-content">
+            <h3 class="modal-title">发货进度</h3>
+            <div id="shipping-items">
+                <!-- 动态生成发货物品 -->
+            </div>
+            <div id="shipping-timer" style="text-align: center; font-size: 24px; margin: 20px 0;">10:00</div>
+            <button class="modal-btn cancel-btn" id="cancel-shipping" style="width: 100%;">取消提货</button>
+        </div>
+    </div>
+    
+    <script>
+        // 完整的商品数据
+        const items = [
+            { name: "蝴蝶刀渐变之色", image: "蝴蝶刀渐变之色.jpg", wear: "崭新出场", probability: 0.05, value: 3228.47, rarity: "隐秘级" },
+            { name: "蝴蝶刀自动化", image: "蝴蝶刀自动化.jpg", wear: "略有磨损", probability: 0.08, value: 2128.47, rarity: "隐秘级" },
+            { name: "驾驶手套西装革履", image: "驾驶手套西装革履.jpg", wear: "略有磨损", probability: 0.31, value: 1028.47, rarity: "军需级" },
+            { name: "驾驶手套雪豹", image: "驾驶手套雪豹.jpg", wear: "崭新出场", probability: 0.5, value: 828.47, rarity: "军需级" },
+            { name: "锯齿爪刀表面淬火", image: "锯齿爪刀表面淬火.jpg", wear: "略有磨损", probability: 0.6, value: 1028.47, rarity: "军需级" },
+            { name: "锯齿爪刀表面淬火", image: "锯齿爪刀表面淬火.jpg", wear: "久经沙场", probability: 0.4, value: 841.5, rarity: "军需级" },
+            { name: "骷髅匕首", image: "骷髅匕首.jpg", wear: "崭新出场", probability: 0.45, value: 1261.51, rarity: "军需级" },
+            { name: "流浪者匕首屠夫", image: "流浪者匕首屠夫.jpg", wear: "崭新出场", probability: 0.46, value: 1004.90, rarity: "军需级" },
+            { name: "摩托手套崩", image: "摩托手套崩.jpg", wear: "崭新出场", probability: 0.57, value: 2353.03, rarity: "隐秘级" },
+            { name: "摩托手套崩", image: "摩托手套崩.jpg", wear: "略有磨损", probability: 1.3, value: 930.18, rarity: "军需级" },
+            { name: "咆哮M4", image: "咆哮M4.jpg", wear: "崭新出场", probability: 0.01, value: 10380.37, rarity: "隐秘级" },
+            { name: "咆哮M4", image: "咆哮M4.jpg", wear: "略有磨损", probability: 0.08, value: 7133.96, rarity: "隐秘级" },
+            { name: "咆哮M4", image: "咆哮M4.jpg", wear: "崭新出场", probability: 0.05, value: 9276.07, rarity: "隐秘级" },
+            { name: "咆哮M4", image: "咆哮M4.jpg", wear: "略有磨损", probability: 0.13, value: 2836.32, rarity: "军需级" },
+            { name: "运动手套迈阿密风云", image: "运动手套迈阿密风云.jpg", wear: "崭新出场", probability: 0.001, value: 31058.99, rarity: "隐秘级" },
+            { name: "运动手套迈阿密风云", image: "运动手套迈阿密风云.jpg", wear: "略有磨损", probability: 0.1, value: 6139.32, rarity: "隐秘级" },
+            { name: "运动手套潘多拉", image: "运动手套潘多拉.jpg", wear: "久经沙场", probability: 0.015, value: 13938.03, rarity: "隐秘级" },
+            { name: "运动手套潘多拉", image: "运动手套潘多拉.jpg", wear: "略有磨损", probability: 0.001, value: 18883.30, rarity: "隐秘级" },
+            { name: "运动手套树篱迷宫", image: "运动手套树篱迷宫.jpg", wear: "崭新出场", probability: 0.00011, value: 79110.23, rarity: "隐秘级" },
+            { name: "运动手套树篱迷宫", image: "运动手套树篱迷宫.jpg", wear: "略有磨损", probability: 0.001, value: 27892.38, rarity: "隐秘级" },
+            { name: "运动手套双硒", image: "运动手套双硒.jpg", wear: "久经沙场", probability: 0.56, value: 1178.06, rarity: "军需级" },
+            { name: "运动手套双硒", image: "运动手套双硒.jpg", wear: "略有磨损", probability: 0.14, value: 27892.38, rarity: "隐秘级" },
+            { name: "爪子刀传说", image: "爪子刀传说.jpg", wear: "久经沙场", probability: 0.23, value: 1616.48, rarity: "军需级" },
+            { name: "爪子刀多普勒（红宝石）", image: "爪子刀多普勒（红宝石）.jpg", wear: "久经沙场", probability: 0.001, value: 15901.83, rarity: "隐秘级" },
+            { name: "专业手套渐变之色", image: "专业手套渐变之色.jpg", wear: "略有磨损", probability: 0.24, value: 1817.8, rarity: "军需级" },
+            { name: "专业手套深红和服", image: "专业手套深红和服.jpg", wear: "略有磨损", probability: 0.024, value: 12133.07, rarity: "隐秘级" },
+            { name: "专业手套深红之王", image: "专业手套深红之王.jpg", wear: "略有磨损", probability: 0.567, value: 1000.18, rarity: "军需级" },
+            { name: "AK47暗影破坏者", image: "AK47暗影破坏者.jpg", wear: "略有磨损", probability: 16.0, value: 8.38, rarity: "工业级" },
+            { name: "蝴蝶刀虎牙", image: "蝴蝶刀虎牙.jpg", wear: "崭新出场", probability: 0.123, value: 1850.32, rarity: "军需级" },
+            { name: "AK47黄金藤曼", image: "AK47黄金藤曼.jpg", wear: "略有磨损", probability: 0.042, value: 4498.76, rarity: "军需级" },
+            { name: "AK47可燃冰", image: "AK47可燃冰.jpg", wear: "略有磨损", probability: 12.0, value: 14.49, rarity: "工业级" },
+            { name: "AK47莫言", image: "AK47莫言.jpg", wear: "略有磨损", probability: 13.0, value: 8.51, rarity: "工业级" },
+            { name: "AK47水栽竹", image: "AK47水栽竹.jpg", wear: "崭新出场", probability: 0.115, value: 5136.20, rarity: "军需级" },
+            { name: "AK47野合", image: "AK47野合.jpg", wear: "崭新出场", probability: 0.0012, value: 21741.04, rarity: "隐秘级" },
+            { name: "AWP雷击", image: "AWP雷击.jpg", wear: "崭新出场", probability: 0.889, value: 876.42, rarity: "军需级" },
+            { name: "AWP巨龙传说", image: "AWP巨龙传说.jpg", wear: "崭新出场", probability: 0.002, value: 20821.71, rarity: "隐秘级" },
+            { name: "AWP永恒之枪", image: "AWP永恒之枪.jpg", wear: "崭新出场", probability: 0.002, value: 21119.88, rarity: "隐秘级" },
+            { name: "M4A1氮化处理", image: "M4A1氮化处理.jpg", wear: "崭新出场", probability: 12.0, value: 7.12, rarity: "工业级" },
+            { name: "M4A1伊卡洛斯的陨落", image: "M4A1伊卡洛斯的陨落.jpg", wear: "崭新出场", probability: 0.5, value: 817.63, rarity: "军需级" },
+            { name: "M4A4死寂空间", image: "M4A4死寂空间.jpg", wear: "久经沙场", probability: 10.0, value: 17.59, rarity: "工业级" },
+            { name: "M9刺刀多普勒（红宝石）", image: "M9刺刀多普勒（红宝石）.jpg", wear: "崭新出场", probability: 0.001, value: 19504.22, rarity: "隐秘级" },
+            { name: "M9刺刀渐变大理石", image: "M9刺刀渐变大理石.jpg", wear: "崭新出场", probability: 0.15, value: 2220.78, rarity: "军需级" },
+            { name: "M9刺刀外表生锈", image: "M9刺刀外表生锈.jpg", wear: "战痕累累", probability: 0.25, value: 789.57, rarity: "军需级" },
+            { name: "M9刺刀自动化", image: "M9刺刀自动化.jpg", wear: "久经沙场", probability: 0.3, value: 1717.77, rarity: "军需级" },
+            { name: "USP不锈钢", image: "USP不锈钢.jpg", wear: "久经沙场", probability: 10.0, value: 8.59, rarity: "工业级" },
+            { name: "USP蓝图", image: "USP蓝图.jpg", wear: "久经沙场", probability: 15.0, value: 5.60, rarity: "工业级" },
+            { name: "刺刀", image: "刺刀.jpg", wear: "崭新出场", probability: 0.44, value: 850.82, rarity: "军需级" },
+            { name: "刺刀多普勒", image: "刺刀多普勒.jpg", wear: "崭新出场", probability: 0.6, value: 1005.09, rarity: "军需级" },
+            { name: "刺刀虎牙", image: "刺刀虎牙.jpg", wear: "崭新出场", probability: 0.8, value: 850.32, rarity: "军需级" },
+            { name: "格洛克水灵", image: "格洛克水灵.jpg", wear: "崭新出场", probability: 10.0, value: 8.73, rarity: "工业级" },
+            { name: "蝴蝶刀都市伪装", image: "蝴蝶刀都市伪装.jpg", wear: "久经沙场", probability: 0.5, value: 990.60, rarity: "军需级" },
+            { name: "蝴蝶刀多普勒（红宝石）", image: "蝴蝶刀多普勒（红宝石）.jpg", wear: "崭新出场", probability: 0.001, value: 20705.43, rarity: "隐秘级" },
+            { name: "蝴蝶刀多普勒", image: "蝴蝶刀多普勒.jpg", wear: "崭新出场", probability: 0.008, value: 5519.62, rarity: "隐秘级" }
+        ];
+
+        // 用户数据
+        let userBalance = 1000; // 初始1000豆用于测试
+        let userInventory = [];
+        let rechargeHistory = [];
+        let openHistory = [];
+        let recentItems = [];
+        let shippingItems = [];
+        let shippingTimer = null;
+        let shippingTimeLeft = 600; // 10分钟 = 600秒
+
+        // DOM元素
+        const balanceDisplay = document.getElementById('user-balance');
+        const rechargeBtn = document.getElementById('recharge-btn');
+        const rechargeModal = document.getElementById('recharge-modal');
+        const confirmRecharge = document.getElementById('confirm-recharge');
+        const cancelRecharge = document.getElementById('cancel-recharge');
+        const paidBtn = document.getElementById('paid-btn');
+        const problemBtn = document.getElementById('problem-btn');
+        const qrCode = document.getElementById('qr-code');
+        const rechargeAmount = document.getElementById('recharge-amount');
+        const openOnceBtn = document.getElementById('open-once');
+        const openFiveBtn = document.getElementById('open-five');
+        const animationContainer = document.getElementById('animation-container');
+        const itemScroll = document.getElementById('item-scroll');
+        const resultModal = document.getElementById('result-modal');
+        const resultItem = document.getElementById('result-item');
+        const exchangeBtn = document.getElementById('exchange-btn');
+        const continueBtn = document.getElementById('continue-btn');
+        const itemsShowcase = document.getElementById('items-showcase');
+        const recentItemsContainer = document.getElementById('recent-items');
+        const inventoryBtn = document.getElementById('inventory-btn');
+        const inventoryModal = document.getElementById('inventory-modal');
+        const inventoryList = document.getElementById('inventory-list');
+        const decomposeBtn = document.getElementById('decompose-btn');
+        const withdrawBtn = document.getElementById('withdraw-btn');
+        const historyBtn = document.getElementById('history-btn');
+        const historyModal = document.getElementById('history-modal');
+        const historyList = document.getElementById('history-list');
+        const historyTabs = document.querySelectorAll('.tab');
+        const shippingModal = document.getElementById('shipping-modal');
+        const shippingItemsContainer = document.getElementById('shipping-items');
+        const shippingTimerDisplay = document.getElementById('shipping-timer');
+        const cancelShippingBtn = document.getElementById('cancel-shipping');
+
+        // 初始化页面
+        function initPage() {
+            updateBalanceDisplay();
+            loadItemsShowcase();
+            loadRecentItems();
+            
+            // 从本地存储加载用户数据
+            const savedData = localStorage.getItem('csgoBoxData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                userBalance = data.balance || 0;
+                userInventory = data.inventory || [];
+                rechargeHistory = data.rechargeHistory || [];
+                openHistory = data.openHistory || [];
+                recentItems = data.recentItems || [];
+                shippingItems = data.shippingItems || [];
+                shippingTimeLeft = data.shippingTimeLeft || 600;
+                
+                updateBalanceDisplay();
+                loadRecentItems();
+                
+                // 如果有正在发货的物品，恢复倒计时
+                if (shippingItems.length > 0 && shippingTimeLeft < 600) {
+                    startShippingTimer();
+                }
+            }
+        }
+        
+        // 更新余额显示
+        function updateBalanceDisplay() {
+            balanceDisplay.textContent = userBalance.toFixed(2);
+            saveUserData();
+        }
+        
+        // 保存用户数据到本地存储
+        function saveUserData() {
+            const data = {
+                balance: userBalance,
+                inventory: userInventory,
+                rechargeHistory: rechargeHistory,
+                openHistory: openHistory,
+                recentItems: recentItems,
+                shippingItems: shippingItems,
+                shippingTimeLeft: shippingTimeLeft
+            };
+            localStorage.setItem('csgoBoxData', JSON.stringify(data));
+        }
+        
+        // 加载商品展示
+        function loadItemsShowcase() {
+            itemsShowcase.innerHTML = '';
+            
+            // 按价值从高到低排序
+            const sortedItems = [...items].sort((a, b) => b.value - a.value);
+            
+            sortedItems.forEach(item => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card';
+                
+                // 根据价值添加边框
+                if (item.value > 2000) {
+                    itemCard.classList.add('border-rainbow');
+                } else if (item.value > 1500) {
+                    itemCard.classList.add('border-orange');
+                } else if (item.value > 1000) {
+                    itemCard.classList.add('border-red');
+                } else if (item.value > 500) {
+                    itemCard.classList.add('border-purple');
+                }
+                
+                const itemImage = document.createElement('div');
+                itemImage.className = 'item-image';
+                itemImage.style.backgroundImage = `url(https://via.placeholder.com/150/333/666?text=${encodeURIComponent(item.name)})`;
+                itemImage.innerHTML = `
+                    <div class="item-badge">${item.rarity}</div>
+                    <div class="item-value">${item.value.toFixed(2)} 豆</div>
+                    <div class="item-wear">${item.wear}</div>
+                `;
+                
+                const itemName = document.createElement('div');
+                itemName.className = 'item-name';
+                itemName.textContent = item.name;
+                
+                itemCard.appendChild(itemImage);
+                itemCard.appendChild(itemName);
+                itemsShowcase.appendChild(itemCard);
+            });
+        }
+        
+        // 加载最近出货
+        function loadRecentItems() {
+            recentItemsContainer.innerHTML = '';
+            
+            // 如果没有最近出货，显示一些示例
+            if (recentItems.length === 0) {
+                const exampleItems = items.filter(item => item.value > 1000)
+                                         .sort(() => 0.5 - Math.random())
+                                         .slice(0, 8);
+                                         
+                exampleItems.forEach((item, index) => {
+                    recentItems.push({
+                        name: item.name,
+                        image: item.image,
+                        value: item.value,
+                        rarity: item.rarity,
+                        time: (index + 1) * 5
+                    });
+                });
+            }
+            
+            recentItems.slice(0, 8).forEach(item => {
+                const recentItem = document.createElement('div');
+                recentItem.className = 'recent-item';
+                recentItem.style.backgroundImage = `url(https://via.placeholder.com/150/333/666?text=${encodeURIComponent(item.name)})`;
+                
+                // 根据价值添加边框
+                if (item.value > 2000) {
+                    recentItem.classList.add('border-rainbow');
+                } else if (item.value > 1500) {
+                    recentItem.classList.add('border-orange');
+                } else if (item.value > 1000) {
+                    recentItem.classList.add('border-red');
+                } else if (item.value > 500) {
+                    recentItem.classList.add('border-purple');
+                }
+                
+                recentItem.innerHTML = `
+                    <div class="item-badge">${item.rarity}</div>
+                    <div class="item-time">${item.time}分钟前</div>
+                `;
+                
+                recentItemsContainer.appendChild(recentItem);
+            });
+        }
+        
+        // 加载仓库物品
+        function loadInventory() {
+            inventoryList.innerHTML = '';
+            
+            if (userInventory.length === 0) {
+                inventoryList.innerHTML = '<p style="text-align: center; color: #888;">仓库空空如也，快去开箱吧!</p>';
+                return;
+            }
+            
+            // 按价值从低到高排序
+            const sortedInventory = [...userInventory].sort((a, b) => a.value - b.value);
+            
+            sortedInventory.forEach(item => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card';
+                itemCard.style.margin = '10px 0';
+                
+                // 根据价值添加边框
+                if (item.value > 2000) {
+                    itemCard.classList.add('border-rainbow');
+                } else if (item.value > 1500) {
+                    itemCard.classList.add('border-orange');
+                } else if (item.value > 1000) {
+                    itemCard.classList.add('border-red');
+                } else if (item.value > 500) {
+                    itemCard.classList.add('border-purple');
+                }
+                
+                const itemImage = document.createElement('div');
+                itemImage.className = 'item-image';
+                itemImage.style.backgroundImage = `url(https://via.placeholder.com/150/333/666?text=${encodeURIComponent(item.name)})`;
+                itemImage.innerHTML = `
+                    <div class="item-badge">${item.rarity}</div>
+                    <div class="item-value">${item.value.toFixed(2)} 豆</div>
+                    <div class="item-wear">${item.wear}</div>
+                `;
+                
+                const itemName = document.createElement('div');
+                itemName.className = 'item-name';
+                itemName.textContent = item.name;
+                
+                itemCard.appendChild(itemImage);
+                itemCard.appendChild(itemName);
+                inventoryList.appendChild(itemCard);
+            });
+        }
+        
+        // 加载历史记录
+        function loadHistory(tab) {
+            historyList.innerHTML = '';
+            
+            if (tab === 'recharge') {
+                if (rechargeHistory.length === 0) {
+                    historyList.innerHTML = '<p style="text-align: center; color: #888;">暂无充值记录</p>';
+                    return;
+                }
+                
+                rechargeHistory.forEach(record => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.innerHTML = `
+                        <div>充值 ${record.amount} 豆</div>
+                        <div>${record.time}</div>
+                    `;
+                    historyList.appendChild(historyItem);
+                });
+            } else {
+                if (openHistory.length === 0) {
+                    historyList.innerHTML = '<p style="text-align: center; color: #888;">暂无开箱记录</p>';
+                    return;
+                }
+                
+                openHistory.forEach(record => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.innerHTML = `
+                        <div>获得 ${record.item} (${record.value} 豆)</div>
+                        <div>${record.time}</div>
+                    `;
+                    historyList.appendChild(historyItem);
+                });
+            }
+        }
+        
+        // 充值功能
+        rechargeBtn.addEventListener('click', () => {
+            rechargeModal.style.display = 'flex';
+        });
+        
+        confirmRecharge.addEventListener('click', () => {
+            const amount = parseFloat(rechargeAmount.value);
+            if (isNaN(amount) || amount <= 0) {
+                alert('请输入有效的充值金额');
+                return;
+            }
+            
+            // 显示二维码
+            document.querySelector('.modal-buttons').style.display = 'none';
+            qrCode.style.display = 'block';
+            
+            // 模拟充值处理
+            setTimeout(() => {
+                userBalance += amount;
+                updateBalanceDisplay();
+                
+                // 记录充值历史
+                rechargeHistory.push({
+                    amount: amount,
+                    time: new Date().toLocaleString()
+                });
+                saveUserData();
+                
+                alert(`充值成功! 已充值 ${amount} 豆`);
+                rechargeModal.style.display = 'none';
+                qrCode.style.display = 'none';
+                document.querySelector('.modal-buttons').style.display = 'flex';
+                rechargeAmount.value = '';
+            }, 2000);
+        });
+        
+        paidBtn.addEventListener('click', () => {
+            alert('充值成功!');
+            rechargeModal.style.display = 'none';
+            qrCode.style.display = 'none';
+            document.querySelector('.modal-buttons').style.display = 'flex';
+            rechargeAmount.value = '';
+        });
+        
+        problemBtn.addEventListener('click', () => {
+            alert('正在反馈客服...');
+            setTimeout(() => {
+                alert('充值成功!');
+                rechargeModal.style.display = 'none';
+                qrCode.style.display = 'none';
+                document.querySelector('.modal-buttons').style.display = 'flex';
+                rechargeAmount.value = '';
+            }, 10000);
+        });
+        
+        cancelRecharge.addEventListener('click', () => {
+            rechargeModal.style.display = 'none';
+            qrCode.style.display = 'none';
+            document.querySelector('.modal-buttons').style.display = 'flex';
+            rechargeAmount.value = '';
+        });
+        
+        // 开箱功能
+        openOnceBtn.addEventListener('click', () => {
+            if (userBalance < 128.88) {
+                alert('余额不足，请先充值');
+                return;
+            }
+            
+            userBalance -= 128.88;
+            updateBalanceDisplay();
+            
+            // 准备开箱动画
+            prepareAnimation(1);
+        });
+        
+        openFiveBtn.addEventListener('click', () => {
+            if (userBalance < 128.88 * 5) {
+                alert('余额不足，请先充值');
+                return;
+            }
+            
+            userBalance -= 128.88 * 5;
+            updateBalanceDisplay();
+            
+            // 准备开箱动画
+            prepareAnimation(5);
+        });
+        
+        // 准备开箱动画
+        function prepareAnimation(count) {
+            animationContainer.style.display = 'flex';
+            itemScroll.innerHTML = '';
+            
+            // 生成滚动项目
+            for (let i = 0; i < 30; i++) {
+                const scrollItem = document.createElement('div');
+                scrollItem.className = 'scroll-item';
+                
+                // 随机选择一个商品
+                const randomItem = getRandomItem();
+                scrollItem.textContent = randomItem.name;
+                scrollItem.style.backgroundImage = `url(https://via.placeholder.com/300/444/888?text=${encodeURIComponent(randomItem.name)})`;
+                
+                itemScroll.appendChild(scrollItem);
+            }
+            
+            // 开始动画
+            setTimeout(() => {
+                startAnimation(count);
+            }, 500);
+        }
+        
+        // 获取随机商品（根据概率）
+        function getRandomItem() {
+            const random = Math.random() * 100;
+            let cumulativeProbability = 0;
+            
+            for (const item of items) {
+                cumulativeProbability += item.probability;
+                if (random <= cumulativeProbability) {
+                    return item;
+                }
+            }
+            
+            return items[items.length - 1]; // 默认返回最后一个
+        }
+        
+        // 开始动画
+        function startAnimation(count) {
+            const scrollWidth = itemScroll.scrollWidth;
+            const containerWidth = itemScroll.clientWidth;
+            const targetScrollLeft = scrollWidth - containerWidth;
+            
+            let startTime = null;
+            const duration = 5000; // 5秒动画
+            
+            function animate(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = timestamp - startTime;
+                const percentage = Math.min(progress / duration, 1);
+                
+                // 缓动函数 - 先快后慢
+                const easing = 1 - Math.pow(1 - percentage, 3);
+                
+                itemScroll.scrollLeft = easing * targetScrollLeft;
+                
+                if (progress < duration) {
+                    requestAnimationFrame(animate);
+                } else {
+                    // 动画结束
+                    setTimeout(() => {
+                        animationContainer.style.display = 'none';
+                        const wonItem = getRandomItem();
+                        showResult(wonItem);
+                        
+                        // 如果是五连抽，继续下一个
+                        if (count > 1) {
+                            setTimeout(() => {
+                                prepareAnimation(count - 1);
+                            }, 1500);
+                        }
+                    }, 500);
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        
+        // 显示中奖结果
+        function showResult(item) {
+            resultModal.style.display = 'flex';
+            resultItem.innerHTML = `
+                <div class="item-badge">${item.rarity}</div>
+                <div class="item-value">${item.value.toFixed(2)} 豆</div>
+                <div class="item-wear">${item.wear}</div>
+                <div style="position: absolute; bottom: 30px; width: 100%; text-align: center; background-color: rgba(0,0,0,0.7); padding: 5px;">${item.name}</div>
+            `;
+            resultItem.style.backgroundImage = `url(https://via.placeholder.com/300/444/888?text=${encodeURIComponent(item.name)})`;
+            
+            // 添加到用户仓库
+            userInventory.push(item);
+            
+            // 记录开箱历史
+            openHistory.push({
+                item: item.name,
+                value: item.value,
+                time: new Date().toLocaleString()
+            });
+            
+            // 如果价值大于1000，添加到最近出货
+            if (item.value > 1000) {
+                recentItems.unshift({
+                    name: item.name,
+                    image: item.image,
+                    value: item.value,
+                    rarity: item.rarity,
+                    time: 0 // 刚刚抽到
+                });
+                
+                // 限制最近出货数量为8个
+                if (recentItems.length > 8) {
+                    recentItems.pop();
+                }
+                
+                loadRecentItems();
+            }
+            
+            saveUserData();
+        }
+        
+        // 置换等价金额
+        exchangeBtn.addEventListener('click', () => {
+            const itemValue = parseFloat(resultItem.querySelector('.item-value').textContent.split(' ')[0]);
+            userBalance += itemValue;
+            updateBalanceDisplay();
+            
+            // 从仓库中移除该物品
+            userInventory.pop();
+            saveUserData();
+            
+            resultModal.style.display = 'none';
+        });
+        
+        // 继续抽奖
+        continueBtn.addEventListener('click', () => {
+            resultModal.style.display = 'none';
+        });
+        
+        // 仓库功能
+        inventoryBtn.addEventListener('click', () => {
+            loadInventory();
+            inventoryModal.style.display = 'flex';
+        });
+        
+        // 一键分解
+        decomposeBtn.addEventListener('click', () => {
+            if (userInventory.length === 0) {
+                alert('仓库中没有可分解的物品');
+                return;
+            }
+            
+            // 按价值从低到高排序
+            const sortedInventory = [...userInventory].sort((a, b) => a.value - b.value);
+            
+            // 分解最便宜的10个物品
+            const toDecompose = sortedInventory.slice(0, 10);
+            const totalValue = toDecompose.reduce((sum, item) => sum + item.value, 0);
+            
+            if (confirm(`确定要分解这${toDecompose.length}件物品吗？将获得${totalValue.toFixed(2)}豆`)) {
+                userInventory = userInventory.filter(item => !toDecompose.includes(item));
+                userBalance += totalValue;
+                updateBalanceDisplay();
+                loadInventory();
+                saveUserData();
+                alert(`成功分解${toDecompose.length}件物品，获得${totalValue.toFixed(2)}豆`);
+            }
+        });
+        
+        // 提货
+        withdrawBtn.addEventListener('click', () => {
+            if (userInventory.length === 0) {
+                alert('仓库中没有可提货的物品');
+                return;
+            }
+            
+            // 简单模拟：将所有物品提货
+            shippingItems = [...userInventory];
+            userInventory = [];
+            shippingTimeLeft = 600;
+            
+            // 显示发货进度
+            showShippingProgress();
+            startShippingTimer();
+            
+            inventoryModal.style.display = 'none';
+            saveUserData();
+        });
+        
+        // 显示发货进度
+        function showShippingProgress() {
+            shippingItemsContainer.innerHTML = '';
+            
+            shippingItems.forEach(item => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card';
+                itemCard.style.margin = '10px 0';
+                
+                const itemImage = document.createElement('div');
+                itemImage.className = 'item-image';
+                itemImage.style.backgroundImage = `url(https://via.placeholder.com/150/333/666?text=${encodeURIComponent(item.name)})`;
+                itemImage.innerHTML = `
+                    <div class="item-badge">${item.rarity}</div>
+                    <div class="item-value">${item.value.toFixed(2)} 豆</div>
+                    <div class="item-wear">${item.wear}</div>
+                `;
+                
+                const itemName = document.createElement('div');
+                itemName.className = 'item-name';
+                itemName.textContent = item.name;
+                
+                itemCard.appendChild(itemImage);
+                itemCard.appendChild(itemName);
+                shippingItemsContainer.appendChild(itemCard);
+            });
+            
+            updateShippingTimerDisplay();
+            shippingModal.style.display = 'flex';
+        }
+        
+        // 开始发货倒计时
+        function startShippingTimer() {
+            if (shippingTimer) clearInterval(shippingTimer);
+            
+            shippingTimer = setInterval(() => {
+                shippingTimeLeft--;
+                updateShippingTimerDisplay();
+                
+                if (shippingTimeLeft <= 0) {
+                    clearInterval(shippingTimer);
+                    shippingTimer = null;
+                    shippingItems = [];
+                    shippingTimeLeft = 600;
+                    shippingModal.style.display = 'none';
+                    alert('发货成功!');
+                    saveUserData();
+                }
+            }, 1000);
+        }
+        
+        // 更新发货倒计时显示
+        function updateShippingTimerDisplay() {
+            const minutes = Math.floor(shippingTimeLeft / 60);
+            const seconds = shippingTimeLeft % 60;
+            shippingTimerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            saveUserData();
+        }
+        
+        // 取消提货
+        cancelShippingBtn.addEventListener('click', () => {
+            if (confirm('确定要取消提货吗？物品将返回仓库')) {
+                clearInterval(shippingTimer);
+                shippingTimer = null;
+                
+                // 将物品返回仓库
+                userInventory = [...userInventory, ...shippingItems];
+                shippingItems = [];
+                shippingTimeLeft = 600;
+                
+                shippingModal.style.display = 'none';
+                saveUserData();
+                alert('已取消提货，物品已返回仓库');
+            }
+        });
+        
+        // 历史记录功能
+        historyBtn.addEventListener('click', () => {
+            loadHistory('recharge');
+            historyModal.style.display = 'flex';
+        });
+        
+        // 历史记录标签切换
+        historyTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                historyTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                loadHistory(tab.dataset.tab);
+            });
+        });
+        
+        // 关闭模态框
+        window.addEventListener('click', (e) => {
+            if (e.target === rechargeModal) {
+                rechargeModal.style.display = 'none';
+                qrCode.style.display = 'none';
+                document.querySelector('.modal-buttons').style.display = 'flex';
+                rechargeAmount.value = '';
+            }
+            
+            if (e.target === resultModal) {
+                resultModal.style.display = 'none';
+            }
+            
+            if (e.target === inventoryModal) {
+                inventoryModal.style.display = 'none';
+            }
+            
+            if (e.target === historyModal) {
+                historyModal.style.display = 'none';
+            }
+            
+            if (e.target === shippingModal) {
+                // 发货进度模态框不能通过点击外部关闭
+            }
+        });
+        
+        // 初始化页面
+        initPage();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSGO风格武器箱开箱</title>
+    <style>
+        :root {
+            --purple-border: #9c27b0;
+            --red-border: #f44336;
+            --orange-border: #ff9800;
+            --gold-border: #ffd700;
+            --primary-color: #2196f3;
+            --dark-bg: #1a1a1a;
+            --darker-bg: #121212;
+            --light-text: #e0e0e0;
+            --container-bg: #252525;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background-color: var(--darker-bg);
+            padding: 15px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .balance {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .balance-icon {
+            color: var(--gold-border);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1976d2;
+        }
+        
+        .btn-success {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #388e3c;
+        }
+        
+        .btn-danger {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #d32f2f;
+        }
+        
+        main {
+            flex: 1;
+            padding: 20px 0;
+        }
+        
+        .section-title {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+            color: var(--primary-color);
+        }
+        
+        /* 抽奖区域 */
+        .lottery-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        
+        .case-container {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            margin-bottom: 20px;
+            border: 2px solid #444;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--container-bg);
+        }
+        
+        .case-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .open-case-btn {
+            padding: 12px 30px;
+            font-size: 18px;
+            background-color: var(--orange-border);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+        
+        .open-case-btn:hover {
+            background-color: #f57c00;
+        }
+        
+        .lottery-buttons {
+            display: flex;
+            margin-top: 20px;
+        }
+        
+        /* 商品展示 */
+        .items-section {
+            margin-bottom: 40px;
+        }
+        
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+        
+        .item-card {
+            background-color: var(--container-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .item-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .item-image-container {
+            position: relative;
+            padding-top: 75%;
+            overflow: hidden;
+        }
+        
+        .item-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: #333;
+        }
+        
+        .item-rarity {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .item-info {
+            padding: 10px;
+        }
+        
+        .item-name {
+            font-size: 14px;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .item-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--gold-border);
+        }
+        
+        .item-wear {
+            font-size: 12px;
+            color: #aaa;
+        }
+        
+        /* 最近出货 */
+        .recent-drops {
+            margin-bottom: 40px;
+        }
+        
+        .recent-drops-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 10px 0;
+        }
+        
+        .recent-drop {
+            flex: 0 0 120px;
+            background-color: var(--container-bg);
+            border-radius: 6px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .recent-drop-image {
+            width: 100%;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 5px;
+        }
+        
+        .recent-drop-time {
+            font-size: 12px;
+            color: #aaa;
+        }
+        
+        /* 抽奖动画 */
+        .lottery-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .lottery-slots {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .slot-container {
+            position: relative;
+            width: 600px;
+            height: 100px;
+            overflow: hidden;
+            border: 2px solid #444;
+            border-radius: 8px;
+        }
+        
+        .slot-items {
+            display: flex;
+            position: absolute;
+            left: 0;
+            transition: left 0.1s linear;
+        }
+        
+        .slot-item {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--container-bg);
+        }
+        
+        .slot-item img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+        
+        .slot-pointer {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background-color: red;
+            z-index: 10;
+        }
+        
+        .lottery-result {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--container-bg);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1001;
+            max-width: 80%;
+        }
+        
+        .result-item {
+            margin-bottom: 20px;
+        }
+        
+        .result-item-image {
+            max-width: 200px;
+            max-height: 150px;
+            margin-bottom: 10px;
+        }
+        
+        .result-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        /* 充值模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--container-bg);
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        .modal-title {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: white;
+        }
+        
+        .qr-code {
+            max-width: 200px;
+            margin: 20px auto;
+            display: none;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        /* 仓库 */
+        .inventory-section {
+            margin-bottom: 40px;
+        }
+        
+        .inventory-tabs {
+            display: flex;
+            border-bottom: 1px solid #444;
+            margin-bottom: 20px;
+        }
+        
+        .inventory-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .inventory-tab.active {
+            border-bottom-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .inventory-content {
+            display: none;
+        }
+        
+        .inventory-content.active {
+            display: block;
+        }
+        
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .inventory-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        /* 历史记录 */
+        .history-section table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .history-section th, .history-section td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+        
+        .history-section th {
+            background-color: var(--darker-bg);
+        }
+        
+        /* 边框颜色 */
+        .border-purple {
+            border: 2px solid var(--purple-border);
+        }
+        
+        .border-red {
+            border: 2px solid var(--red-border);
+        }
+        
+        .border-orange {
+            border: 2px solid var(--orange-border);
+        }
+        
+        .border-gold {
+            border: 2px solid var(--gold-border);
+        }
+        
+        /* 稀有度标签 */
+        .rarity-common {
+            color: #b0b0b0;
+        }
+        
+        .rarity-uncommon {
+            color: #5e9e4f;
+        }
+        
+        .rarity-rare {
+            color: #4a8fd4;
+        }
+        
+        .rarity-mythical {
+            color: #8847ff;
+        }
+        
+        .rarity-legendary {
+            color: #d32ce6;
+        }
+        
+        .rarity-ancient {
+            color: #eb4b4b;
+        }
+        
+        .rarity-immortal {
+            color: #e4ae39;
+        }
+        
+        /* 通知 */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            z-index: 1100;
+            display: none;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification"></div>
+    
+    <header>
+        <div class="container header-content">
+            <div class="logo">CSGO武器箱开箱</div>
+            <div class="user-info">
+                <div class="balance">
+                    <span class="balance-icon">💰</span>
+                    <span id="user-balance">0.</span> 豆
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn btn-primary" id="recharge-btn">充值</button>
+                    <button class="btn btn-primary" id="inventory-btn">仓库</button>
+                    <button class="btn btn-primary" id="history-btn">历史记录</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="lottery-section">
+            <h2 class="section-title">武器箱开箱</h2>
+            <div class="case-container">
+                <img src="武器箱.jpg" alt="武器箱" class="case-image">
+            </div>
+            <p>每次开箱消耗: <strong>128.88</strong> 豆</p>
+            <div class="lottery-buttons">
+                <button class="open-case-btn" id="open-once">开箱一次</button>
+                <button class="open-case-btn" id="open-five">开箱五次</button>
+            </div>
+        </section>
+        
+        <section class="items-section">
+            <h2 class="section-title">可获取物品</h2>
+            <div class="items-grid" id="items-grid">
+                <!-- 物品将通过JavaScript动态加载 -->
+            </div>
+        </section>
+        
+        <section class="recent-drops">
+            <h2 class="section-title">最近出货</h2>
+            <div class="recent-drops-container" id="recent-drops">
+                <!-- 最近出货将通过JavaScript动态加载 -->
+            </div>
+        </section>
+    </main>
+    
+    <!-- 抽奖动画 -->
+    <div class="lottery-animation" id="lottery-animation">
+        <div class="lottery-slots" id="lottery-slots">
+            <!-- 抽奖槽将通过JavaScript动态创建 -->
+        </div>
+    </div>
+    
+    <!-- 抽奖结果 -->
+    <div class="lottery-result" id="lottery-result">
+        <div class="result-item">
+            <img src="" alt="中奖物品" class="result-item-image" id="result-item-image">
+            <h3 id="result-item-name">物品名称</h3>
+            <p id="result-item-wear">磨损程度</p>
+            <p id="result-item-price">0. 豆</p>
+        </div>
+        <div class="result-buttons">
+            <button class="btn btn-success" id="result-exchange">置换</button>
+            <button class="btn btn-primary" id="result-continue">继续开箱</button>
+        </div>
+    </div>
+    
+    <!-- 充值模态框 -->
+    <div class="modal" id="recharge-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">充值</h2>
+            <div class="input-group">
+                <label for="recharge-amount">充值金额 (豆)</label>
+                <input type="number" id="recharge-amount" min="10" step="10" placeholder="请输入充值金额">
+            </div>
+            <img src="微信充值.jpg" alt="微信支付二维码" class="qr-code" id="qr-code">
+            <div class="modal-buttons">
+                <button class="btn btn-success" id="recharge-confirm">确认充值</button>
+                <button class="btn btn-danger" id="recharge-cancel">取消</button>
+            </div>
+            <div class="modal-buttons" id="recharge-after-buttons" style="display: none;">
+                <button class="btn btn-success" id="recharge-paid">我已支付</button>
+                <button class="btn btn-danger" id="recharge-problem">遇到问题</button>
+            </div>
+            <div id="recharge-feedback" style="display: none; margin-top: 20px;">
+                <p>正在反馈客服...</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 仓库模态框 -->
+    <div class="modal" id="inventory-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">仓库</h2>
+            <div class="inventory-tabs">
+                <div class="inventory-tab active" data-tab="inventory">我的物品</div>
+                <div class="inventory-tab" data-tab="sending">正在发送</div>
+            </div>
+            
+            <div class="inventory-content active" id="inventory-tab">
+                <div class="inventory-grid" id="inventory-items">
+                    <!-- 仓库物品将通过JavaScript动态加载 -->
+                </div>
+                <div class="inventory-actions">
+                    <button class="btn btn-primary" id="decompose-btn">一键分解</button>
+                    <button class="btn btn-success" id="exchange-all-btn">全部置换</button>
+                </div>
+            </div>
+            
+            <div class="inventory-content" id="sending-tab">
+                <div class="inventory-grid" id="sending-items">
+                    <!-- 正在发送物品将通过JavaScript动态加载 -->
+                </div>
+                <div id="sending-info">
+                    <p>剩余时间: <span id="sending-timer">10:00</span></p>
+                    <button class="btn btn-danger" id="cancel-sending-btn">取消发送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 历史记录模态框 -->
+    <div class="modal" id="history-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">历史记录</h2>
+            <div class="inventory-tabs">
+                <div class="inventory-tab active" data-tab="recharge-history">充值记录</div>
+                <div class="inventory-tab" data-tab="lottery-history">开箱记录</div>
+            </div>
+            
+            <div class="inventory-content active" id="recharge-history-tab">
+                <div class="history-section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>金额 (豆)</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recharge-history-table">
+                            <!-- 充值记录将通过JavaScript动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="inventory-content" id="lottery-history-tab">
+                <div class="history-section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>物品</th>
+                                <th>磨损</th>
+                                <th>价值 (豆)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lottery-history-table">
+                            <!-- 开箱记录将通过JavaScript动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="btn btn-danger" id="history-close">关闭</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 物品数据
+        const items = [
+            { name: "蝴蝶刀渐变之色", image: "蝴蝶刀渐变之色.jpg", wear: "崭新出场", probability: 0.05, price: 3228.47, rarity: "隐秘级" },
+            { name: "蝴蝶刀自动化", image: "蝴蝶刀自动化.jpg", wear: "略有磨损", probability: 0.08, price: 2128.47, rarity: "隐秘级" },
+            { name: "驾驶手套西装革履", image: "驾驶手套西装革履.jpg", wear: "略有磨损", probability: 0.31, price: 1028.47, rarity: "军需级" },
+            { name: "驾驶手套雪豹", image: "驾驶手套雪豹.jpg", wear: "略有出场", probability: 0.5, price: 828.47, rarity: "军需级" },
+            { name: "锯齿爪刀表面淬火", image: "锯齿爪刀表面淬火.jpg", wear: "略有磨损", probability: 0.6, price: 1028.47, rarity: "军需级" },
+            { name: "锯齿爪刀表面淬火", image: "锯齿爪刀表面淬火.jpg", wear: "久经沙场", probability: 0.39999999, price: 841.5, rarity: "军需级" },
+            { name: "骷髅匕首", image: "骷髅匕首.jpg", wear: "崭新出场", probability: 0.45, price: 1261.51, rarity: "军需级" },
+            { name: "流浪者匕首屠夫", image: "流浪者匕首屠夫.jpg", wear: "崭新出场", probability: 0.459999, price: 1004.90, rarity: "军需级" },
+            { name: "摩托手套崩", image: "摩托手套崩.jpg", wear: "崭新出场", probability: 0.56999999, price: 2353.03, rarity: "军需级" },
+            { name: "摩托手套崩", image: "摩托手套崩.jpg", wear: "略有磨损", probability: 1.3, price: 930.18, rarity: "军需级" },
+            { name: "咆哮M4", image: "咆哮M4.jpg", wear: "崭新出场", probability: 0.01, price: 10380.37, rarity: "隐秘级" },
+            { name: "咆哮M4", image: "咆哮M4.jpg", wear: "略有磨损", probability: 0.08, price: 7133.96, rarity: "隐秘级" },
+            { name: "咆哮M4", image: "咆哮M4.jpg", wear: "崭新出场", probability: 0.04999999, price: 9276.07, rarity: "隐秘级" },
+            { name: "咆哮M4", image: "咆哮M4.jpg", wear: "略有磨损", probability: 0.13, price: 2836.32, rarity: "隐秘级" },
+            { name: "运动手套迈阿密风云", image: "运动手套迈阿密风云.jpg", wear: "崭新出场", probability: 0.1, price: 31058.99, rarity: "隐秘级" },
+            { name: "运动手套迈阿密风云", image: "运动手套迈阿密风云.jpg", wear: "略有磨损", probability: 0.1, price: 6139.32, rarity: "隐秘级" },
+            { name: "运动手套潘多拉", image: "运动手套潘多拉.jpg", wear: "久经沙场", probability: 0.015, price: 13938.03, rarity: "隐秘级" },
+            { name: "运动手套潘多拉", image: "运动手套潘多拉.jpg", wear: "略有磨损", probability: 0.1, price: 18883.30, rarity: "隐秘级" },
+            { name: "运动手套树篱迷宫", image: "运动手套树篱迷宫.jpg", wear: "崭新出场", probability: 0.011, price: 79110.23, rarity: "隐秘级" },
+            { name: "运动手套树篱迷宫", image: "运动手套树篱迷宫.jpg", wear: "略有磨损", probability: 0.1, price: 27892.38, rarity: "隐秘级" },
+            { name: "运动手套双硒", image: "运动手套双硒.jpg", wear: "久经沙场", probability: 0.56, price: 1178.06, rarity: "军需级" },
+            { name: "运动手套双硒", image: "运动手套双硒.jpg", wear: "略有磨损", probability: 0.139999, price: 27892.38, rarity: "军需级" },
+            { name: "爪子刀传说", image: "爪子刀传说.jpg", wear: "久经沙场", probability: 0.23, price: 1616.48, rarity: "军需级" },
+            { name: "爪子刀多普勒（红宝石）", image: "爪子刀多普勒（红宝石）.jpg", wear: "久经沙场", probability: 0.1, price: 15901.83, rarity: "隐秘级" },
+            { name: "专业手套渐变之色", image: "专业手套渐变之色.jpg", wear: "略有磨损", probability: 0.24, price: 1817.8, rarity: "军需级" },
+            { name: "专业手套深红和服", image: "专业手套深红和服.jpg", wear: "略有磨损", probability: 0.0239999, price: 12133.07, rarity: "隐秘级" },
+            { name: "专业手套深红之王", image: "专业手套深红之王.jpg", wear: "略有磨损", probability: 0.567, price: 1000.18, rarity: "军需级" },
+            { name: "AK47暗影破坏者", image: "AK47暗影破坏者.jpg", wear: "略有磨损", probability: 16.0000001, price: 8.38, rarity: "工业级" },
+            { name: "蝴蝶刀虎牙", image: "蝴蝶刀虎牙.jpg", wear: "崭新出场", probability: 0.123, price: 1850.32, rarity: "军需级" },
+            { name: "AK47黄金藤曼", image: "AK47黄金藤曼.jpg", wear: "略有磨损", probability: 0.042, price: 4498.76, rarity: "军需级" },
+            { name: "AK47可燃冰", image: "AK47可燃冰.jpg", wear: "略有磨损", probability: 12, price: 14.49, rarity: "工业级" },
+            { name: "AK47莫言", image: "AK47莫言.jpg", wear: "略有磨损", probability: 13, price: 8.51, rarity: "工业级" },
+            { name: "AK47水栽竹", image: "AK47水栽竹.jpg", wear: "崭新出场", probability: 0.115, price: 5136.20, rarity: "军需级" },
+            { name: "AK47野合", image: "AK47野合.jpg", wear: "崭新出场", probability: 0.12, price: 21741.04, rarity: "隐秘级" },
+            { name: "AWP雷击", image: "AWP雷击.jpg", wear: "崭新出场", probability: 0.88888899, price: 876.42, rarity: "军需级" },
+            { name: "AWP巨龙传说", image: "AWP巨龙传说.jpg", wear: "崭新出场", probability: 0.2, price: 20821.71, rarity: "隐秘级" },
+            { name: "AWP永恒之枪", image: "AWP永恒之枪.jpg", wear: "崭新出场", probability: 0.2, price: 21119.88, rarity: "隐秘级" },
+            { name: "M4A1氮化处理", image: "M4A1氮化处理.jpg", wear: "崭新出场", probability: 12, price: 7.12, rarity: "工业级" },
+            { name: "M4A1伊卡洛斯的陨落", image: "M4A1伊卡洛斯的陨落.jpg", wear: "崭新出场", probability: 0.5, price: 817.63, rarity: "军需级" },
+            { name: "M4A4死寂空间", image: "M4A4死寂空间.jpg", wear: "久经沙场", probability: 10, price: 17.59, rarity: "工业级" },
+            { name: "M9刺刀多普勒（红宝石）", image: "M9刺刀多普勒（红宝石）.jpg", wear: "崭新出场", probability: 0.1, price: 19504.22, rarity: "隐秘级" },
+            { name: "M9刺刀渐变大理石", image: "M9刺刀渐变大理石.jpg", wear: "崭新出场", probability: 0.15, price: 2220.78, rarity: "军需级" },
+            { name: "M9刺刀外表生锈", image: "M9刺刀外表生锈.jpg", wear: "战痕累累", probability: 0.25, price: 789.57, rarity: "军需级" },
+            { name: "M9刺刀自动化", image: "M9刺刀自动化.jpg", wear: "久经沙场", probability: 0.3, price: 1717.77, rarity: "军需级" },
+            { name: "USP不锈钢", image: "USP不锈钢.jpg", wear: "久经沙场", probability: 10, price: 8.59, rarity: "工业级" },
+            { name: "USP蓝图", image: "USP蓝图.jpg", wear: "久经沙场", probability: 15, price: 5.60, rarity: "工业级" },
+            { name: "刺刀", image: "刺刀.jpg", wear: "崭新出场", probability: 0.44, price: 850.82, rarity: "军需级" },
+            { name: "刺刀多普勒", image: "刺刀多普勒.jpg", wear: "崭新出场", probability: 0.5999999, price: 1005.09, rarity: "军需级" },
+            { name: "刺刀虎牙", image: "刺刀虎牙.jpg", wear: "崭新出场", probability: 0.8000001, price: 850.32, rarity: "军需级" },
+            { name: "格洛克水灵", image: "格洛克水灵.jpg", wear: "崭新出场", probability: 10.1, price: 8.73, rarity: "工业级" },
+            { name: "蝴蝶刀都市伪装", image: "蝴蝶刀都市伪装.jpg", wear: "久经沙场", probability: 0.5, price: 990.60, rarity: "军需级" },
+            { name: "蝴蝶刀多普勒（红宝石）", image: "蝴蝶刀多普勒（红宝石）.jpg", wear: "崭新出场", probability: 0.1, price: 20705.43, rarity: "隐秘级" },
+            { name: "蝴蝶刀多普勒", image: "蝴蝶刀多普勒.jpg", wear: "崭新出场", probability: 0.8, price: 5519.62, rarity: "隐秘级" }
+        ];
+
+        // 游戏状态
+        let gameState = {
+            balance: 0,
+            inventory: [],
+            sendingItems: [],
+            rechargeHistory: [],
+            lotteryHistory: [],
+            recentDrops: []
+        };
+
+        // DOM元素
+        const elements = {
+            notification: document.getElementById('notification'),
+            userBalance: document.getElementById('user-balance'),
+            itemsGrid: document.getElementById('items-grid'),
+            recentDrops: document.getElementById('recent-drops'),
+            lotteryAnimation: document.getElementById('lottery-animation'),
+            lotterySlots: document.getElementById('lottery-slots'),
+            lotteryResult: document.getElementById('lottery-result'),
+            resultItemImage: document.getElementById('result-item-image'),
+            resultItemName: document.getElementById('result-item-name'),
+            resultItemWear: document.getElementById('result-item-wear'),
+            resultItemPrice: document.getElementById('result-item-price'),
+            rechargeModal: document.getElementById('recharge-modal'),
+            rechargeAmount: document.getElementById('recharge-amount'),
+            qrCode: document.getElementById('qr-code'),
+            rechargeAfterButtons: document.getElementById('recharge-after-buttons'),
+            rechargeFeedback: document.getElementById('recharge-feedback'),
+            inventoryModal: document.getElementById('inventory-modal'),
+            inventoryItems: document.getElementById('inventory-items'),
+            sendingItems: document.getElementById('sending-items'),
+            sendingTimer: document.getElementById('sending-timer'),
+            historyModal: document.getElementById('history-modal'),
+            rechargeHistoryTable: document.getElementById('recharge-history-table'),
+            lotteryHistoryTable: document.getElementById('lottery-history-table'),
+            openOnceBtn: document.getElementById('open-once'),
+            openFiveBtn: document.getElementById('open-five'),
+            rechargeBtn: document.getElementById('recharge-btn'),
+            inventoryBtn: document.getElementById('inventory-btn'),
+            historyBtn: document.getElementById('history-btn'),
+            rechargeConfirm: document.getElementById('recharge-confirm'),
+            rechargeCancel: document.getElementById('recharge-cancel'),
+            rechargePaid: document.getElementById('recharge-paid'),
+            rechargeProblem: document.getElementById('recharge-problem'),
+            resultExchange: document.getElementById('result-exchange'),
+            resultContinue: document.getElementById('result-continue'),
+            decomposeBtn: document.getElementById('decompose-btn'),
+            exchangeAllBtn: document.getElementById('exchange-all-btn'),
+            cancelSendingBtn: document.getElementById('cancel-sending-btn'),
+            historyClose: document.getElementById('history-close')
+        };
+
+        // 显示通知
+        function showNotification(message, type = 'info') {
+            const notification = elements.notification;
+            notification.textContent = message;
+            notification.style.display = 'block';
+            
+            // 设置背景颜色
+            if (type === 'success') {
+                notification.style.backgroundColor = '#4caf50';
+            } else if (type === 'error') {
+                notification.style.backgroundColor = '#f44336';
+            } else if (type === 'warning') {
+                notification.style.backgroundColor = '#ff9800';
+            } else {
+                notification.style.backgroundColor = '#333';
+            }
+            
+            // 3秒后自动隐藏
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // 初始化游戏
+        function initGame() {
+            // 从本地存储加载游戏状态
+            const savedState = localStorage.getItem('csgoCaseGameState');
+            if (savedState) {
+                gameState = JSON.parse(savedState);
+            }
+            
+            updateBalanceDisplay();
+            renderItemsGrid();
+            renderRecentDrops();
+            
+            // 设置事件监听器
+            setupEventListeners();
+            
+            // 检查是否有正在发送的物品
+            checkSendingItems();
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 开箱按钮
+            elements.openOnceBtn.addEventListener('click', () => openCase(1));
+            elements.openFiveBtn.addEventListener('click', () => openCase(5));
+            
+            // 导航按钮
+            elements.rechargeBtn.addEventListener('click', () => elements.rechargeModal.style.display = 'flex');
+            elements.inventoryBtn.addEventListener('click', openInventoryModal);
+            elements.historyBtn.addEventListener('click', openHistoryModal);
+            
+            // 充值相关
+            elements.rechargeConfirm.addEventListener('click', startRecharge);
+            elements.rechargeCancel.addEventListener('click', () => elements.rechargeModal.style.display = 'none');
+            elements.rechargePaid.addEventListener('click', completeRecharge);
+            elements.rechargeProblem.addEventListener('click', handleRechargeProblem);
+            
+            // 抽奖结果
+            elements.resultExchange.addEventListener('click', exchangeItem);
+            elements.resultContinue.addEventListener('click', () => elements.lotteryResult.style.display = 'none');
+            
+            // 仓库
+            elements.decomposeBtn.addEventListener('click', decomposeItems);
+            elements.exchangeAllBtn.addEventListener('click', exchangeAllItems);
+            elements.cancelSendingBtn.addEventListener('click', cancelSending);
+            
+            // 历史记录
+            elements.historyClose.addEventListener('click', () => elements.historyModal.style.display = 'none');
+            
+            // 仓库标签切换
+            document.querySelectorAll('.inventory-tab[data-tab]').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    document.querySelectorAll('.inventory-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.inventory-content').forEach(c => c.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // 历史记录标签切换
+            document.querySelectorAll('#history-modal .inventory-tab[data-tab]').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    document.querySelectorAll('#history-modal .inventory-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('#history-modal .inventory-content').forEach(c => c.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+        }
+
+        // 更新余额显示
+        function updateBalanceDisplay() {
+            elements.userBalance.textContent = gameState.balance.toFixed(2);
+        }
+
+        // 渲染物品网格
+        function renderItemsGrid() {
+            elements.itemsGrid.innerHTML = '';
+            
+            items.forEach(item => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card';
+                
+                // 根据价格设置边框颜色
+                if (item.price > 2000) {
+                    itemCard.classList.add('border-gold');
+                } else if (item.price > 1500) {
+                    itemCard.classList.add('border-orange');
+                } else if (item.price > 1000) {
+                    itemCard.classList.add('border-red');
+                } else if (item.price > 500) {
+                    itemCard.classList.add('border-purple');
+                }
+                
+                itemCard.innerHTML = `
+                    <div class="item-image-container">
+                        <img src="${item.image}" alt="${item.name}" class="item-image" onerror="this.src='https://via.placeholder.com/150x100?text=图片加载失败'">
+                        <span class="item-rarity">${item.rarity}</span>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-price">${item.price.toFixed(2)} 豆</div>
+                        <div class="item-wear">${item.wear}</div>
+                    </div>
+                `;
+                
+                elements.itemsGrid.appendChild(itemCard);
+            });
+        }
+
+        // 渲染最近出货
+        function renderRecentDrops() {
+            elements.recentDrops.innerHTML = '';
+            
+            if (gameState.recentDrops.length === 0) {
+                elements.recentDrops.innerHTML = '<p>暂无最近出货记录</p>';
+                return;
+            }
+            
+            gameState.recentDrops.forEach(drop => {
+                const dropElement = document.createElement('div');
+                dropElement.className = 'recent-drop';
+                
+                // 根据价格设置边框颜色
+                if (drop.price > 2000) {
+                    dropElement.classList.add('border-gold');
+                } else if (drop.price > 1500) {
+                    dropElement.classList.add('border-orange');
+                } else if (drop.price > 1000) {
+                    dropElement.classList.add('border-red');
+                } else if (drop.price > 500) {
+                    dropElement.classList.add('border-purple');
+                }
+                
+                dropElement.innerHTML = `
+                    <img src="${drop.image}" alt="${drop.name}" class="recent-drop-image" onerror="this.src='https://via.placeholder.com/100x80?text=图片加载失败'">
+                    <div class="recent-drop-name">${drop.name}</div>
+                    <div class="recent-drop-price">${drop.price.toFixed(2)} 豆</div>
+                    <div class="recent-drop-time">${drop.time}分钟前</div>
+                `;
+                
+                elements.recentDrops.appendChild(dropElement);
+            });
+        }
+
+        // 开箱功能
+        function openCase(count) {
+            if (gameState.balance < 128.88 * count) {
+                showNotification('余额不足，请充值！', 'error');
+                elements.rechargeModal.style.display = 'flex';
+                return;
+            }
+            
+            // 扣除余额
+            gameState.balance -= 128.88 * count;
+            updateBalanceDisplay();
+            saveGameState();
+            
+            // 准备抽奖
+            const results = [];
+            for (let i = 0; i < count; i++) {
+                results.push(getRandomItem());
+            }
+            
+            // 显示通知
+            if (count === 1) {
+                showNotification('正在开启单个武器箱...', 'info');
+            } else {
+                showNotification('正在开启五个武器箱...', 'info');
+            }
+            
+            // 显示抽奖动画
+            setTimeout(() => {
+                showLotteryAnimation(results);
+            }, 1000);
+        }
+
+        // 获取随机物品
+        function getRandomItem() {
+            // 计算总概率
+            const totalProbability = items.reduce((sum, item) => sum + item.probability, 0);
+            let random = Math.random() * totalProbability;
+            
+            // 选择物品
+            let selectedItem = null;
+            for (const item of items) {
+                random -= item.probability;
+                if (random <= 0) {
+                    selectedItem = {...item};
+                    break;
+                }
+            }
+            
+            return selectedItem;
+        }
+
+        // 显示抽奖动画
+        function showLotteryAnimation(results) {
+            elements.lotteryAnimation.style.display = 'flex';
+            elements.lotterySlots.innerHTML = '';
+            
+            const slotCount = results.length;
+            const slotWidth = 1000;
+            const itemWidth = 10;
+            
+            for (let i = 0; i < slotCount; i++) {
+                const slotContainer = document.createElement('div');
+                slotContainer.className = 'slot-container';
+                
+                const slotItems = document.createElement('div');
+                slotItems.className = 'slot-items';
+                
+                // 创建足够多的物品用于滚动
+                const itemCount = 1000;
+                for (let j = 0; j < itemCount; j++) {
+                    const randomItem = getRandomItem();
+                    const slotItem = document.createElement('div');
+                    slotItem.className = 'slot-item';
+                    slotItem.innerHTML = `<img src="${randomItem.image}" alt="${randomItem.name}" onerror="this.src='https://via.placeholder.com/100x100?text=图片加载失败'">`;
+                    slotItems.appendChild(slotItem);
+                }
+                
+                // 添加指针
+                const pointer = document.createElement('div');
+                pointer.className = 'slot-pointer';
+                
+                slotContainer.appendChild(slotItems);
+                slotContainer.appendChild(pointer);
+                elements.lotterySlots.appendChild(slotContainer);
+                
+                // 设置初始位置
+                const itemsElement = slotContainer.querySelector('.slot-items');
+                itemsElement.style.left = `-${itemWidth * 30}px`;
+                
+                // 开始动画
+                setTimeout(() => {
+                    animateSlot(slotContainer, results[i], i, slotCount);
+                }, i * 500);
+            }
+        }
+
+        // 动画单个槽
+        function animateSlot(slotContainer, result, index, totalSlots) {
+            const itemsElement = slotContainer.querySelector('.slot-items');
+            const itemWidth = 100;
+            const targetPosition = -itemWidth * 50; // 中间位置
+            
+            let startTime = null;
+            let currentPosition = parseInt(itemsElement.style.left);
+            const duration = 2000 + index * 300; // 2秒基础 + 每个槽增加0.3秒
+            
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = (timestamp - startTime) / duration;
+                
+                if (progress < 1) {
+                    // 缓动函数 - 先加速后减速
+                    const easedProgress = easeInOutCubic(progress);
+                    const newPosition = currentPosition + (targetPosition - currentPosition) * easedProgress;
+                    itemsElement.style.left = `${newPosition}px`;
+                    requestAnimationFrame(step);
+                } else {
+                    // 动画结束，显示结果
+                    itemsElement.style.left = `${targetPosition}px`;
+                    
+                    // 如果是最后一个槽，显示结果
+                    if (index === totalSlots - 1) {
+                        setTimeout(() => {
+                            elements.lotteryAnimation.style.display = 'none';
+                            showLotteryResult(result, totalSlots);
+                        }, 500);
+                    }
+                }
+            }
+            
+            requestAnimationFrame(step);
+        }
+
+        // 缓动函数
+        function easeInOutCubic(t) {
+            return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        }
+
+        // 显示抽奖结果
+        function showLotteryResult(result, totalSlots) {
+            // 添加到仓库
+            gameState.inventory.push(result);
+            
+            // 添加到历史记录
+            gameState.lotteryHistory.push({
+                date: new Date().toLocaleString(),
+                item: result.name,
+                wear: result.wear,
+                price: result.price
+            });
+            
+            // 添加到最近出货
+            gameState.recentDrops.unshift({
+                name: result.name,
+                image: result.image,
+                price: result.price,
+                time: 0
+            });
+            
+            // 保持最近出货不超过8个
+            if (gameState.recentDrops.length > 8) {
+                gameState.recentDrops.pop();
+            }
+            
+            // 更新最近出货时间
+            if (!window.recentDropsInterval) {
+                window.recentDropsInterval = setInterval(() => {
+                    gameState.recentDrops.forEach(drop => {
+                        drop.time = (drop.time || 0) + 1;
+                    });
+                    renderRecentDrops();
+                    saveGameState();
+                }, 60000); // 每分钟更新一次时间
+            }
+            
+            // 显示结果
+            elements.resultItemImage.src = result.image;
+            elements.resultItemImage.onerror = function() {
+                this.src = 'https://via.placeholder.com/200x150?text=图片加载失败';
+            };
+            elements.resultItemName.textContent = result.name;
+            elements.resultItemWear.textContent = result.wear;
+            elements.resultItemPrice.textContent = `${result.price.toFixed(2)} 豆`;
+            elements.lotteryResult.style.display = 'block';
+            
+            // 显示通知
+            if (totalSlots === 1) {
+                showNotification(`恭喜获得: ${result.name} (${result.wear})`, 'success');
+            } else {
+                showNotification(`五连抽完成，最后获得: ${result.name} (${result.wear})`, 'success');
+            }
+            
+            // 保存游戏状态
+            saveGameState();
+            
+            // 更新UI
+            renderRecentDrops();
+        }
+
+        // 置换物品
+        function exchangeItem() {
+            const resultName = elements.resultItemName.textContent;
+            const resultPrice = parseFloat(elements.resultItemPrice.textContent);
+            
+            // 从仓库移除
+            gameState.inventory = gameState.inventory.filter(item => !(item.name === resultName && item.price === resultPrice));
+            
+            // 添加到余额
+            gameState.balance += resultPrice;
+            
+            // 更新显示
+            updateBalanceDisplay();
+            elements.lotteryResult.style.display = 'none';
+            
+            // 显示通知
+            showNotification(`成功置换 ${resultName}，获得 ${resultPrice.toFixed(2)} 豆`, 'success');
+            
+            // 保存游戏状态
+            saveGameState();
+        }
+
+        // 打开仓库模态框
+        function openInventoryModal() {
+            elements.inventoryModal.style.display = 'flex';
+            renderInventory();
+        }
+
+        // 渲染仓库
+        function renderInventory() {
+            elements.inventoryItems.innerHTML = '';
+            
+            if (gameState.inventory.length === 0) {
+                elements.inventoryItems.innerHTML = '<p>仓库空空如也，快去开箱吧！</p>';
+                return;
+            }
+            
+            // 按价格排序
+            const sortedInventory = [...gameState.inventory].sort((a, b) => a.price - b.price);
+            
+            sortedInventory.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'item-card';
+                itemElement.dataset.name = item.name;
+                itemElement.dataset.price = item.price;
+                
+                // 根据价格设置边框颜色
+                if (item.price > 2000) {
+                    itemElement.classList.add('border-gold');
+                } else if (item.price > 1500) {
+                    itemElement.classList.add('border-orange');
+                } else if (item.price > 1000) {
+                    itemElement.classList.add('border-red');
+                } else if (item.price > 500) {
+                    itemElement.classList.add('border-purple');
+                }
+                
+                itemElement.innerHTML = `
+                    <div class="item-image-container">
+                        <img src="${item.image}" alt="${item.name}" class="item-image" onerror="this.src='https://via.placeholder.com/150x100?text=图片加载失败'">
+                        <span class="item-rarity">${item.rarity}</span>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-price">${item.price.toFixed(2)} 豆</div>
+                        <div class="item-wear">${item.wear}</div>
+                    </div>
+                `;
+                
+                // 添加点击事件
+                itemElement.addEventListener('click', () => {
+                    itemElement.classList.toggle('selected');
+                });
+                
+                elements.inventoryItems.appendChild(itemElement);
+            });
+            
+            // 渲染正在发送的物品
+            renderSendingItems();
+        }
+
+        // 渲染正在发送的物品
+        function renderSendingItems() {
+            elements.sendingItems.innerHTML = '';
+            
+            if (gameState.sendingItems.length === 0) {
+                elements.sendingItems.innerHTML = '<p>没有正在发送的物品</p>';
+                return;
+            }
+            
+            gameState.sendingItems.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'item-card';
+                
+                // 根据价格设置边框颜色
+                if (item.price > 2000) {
+                    itemElement.classList.add('border-gold');
+                } else if (item.price > 1500) {
+                    itemElement.classList.add('border-orange');
+                } else if (item.price > 1000) {
+                    itemElement.classList.add('border-red');
+                } else if (item.price > 500) {
+                    itemElement.classList.add('border-purple');
+                }
+                
+                itemElement.innerHTML = `
+                    <div class="item-image-container">
+                        <img src="${item.image}" alt="${item.name}" class="item-image" onerror="this.src='https://via.placeholder.com/150x100?text=图片加载失败'">
+                        <span class="item-rarity">${item.rarity}</span>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-price">${item.price.toFixed(2)} 豆</div>
+                        <div class="item-wear">${item.wear}</div>
+                    </div>
+                `;
+                
+                elements.sendingItems.appendChild(itemElement);
+            });
+        }
+
+        // 检查正在发送的物品
+        function checkSendingItems() {
+            if (gameState.sendingItems.length > 0) {
+                const sendingItem = gameState.sendingItems[0];
+                const now = new Date();
+                const sendTime = new Date(sendingItem.sendTime);
+                const elapsed = now - sendTime;
+                const remaining = 10 * 60 * 1000 - elapsed; // 10分钟
+                
+                if (remaining <= 0) {
+                    // 发送完成
+                    gameState.sendingItems.shift();
+                    saveGameState();
+                } else {
+                    // 更新倒计时
+                    updateSendingTimer(remaining);
+                }
+            }
+        }
+
+        // 更新发送计时器
+        function updateSendingTimer(remainingMs) {
+            const minutes = Math.floor(remainingMs / 60000);
+            const seconds = Math.floor((remainingMs % 60000) / 1000);
+            elements.sendingTimer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (remainingMs > 0) {
+                setTimeout(() => updateSendingTimer(remainingMs - 1000), 1000);
+            } else {
+                // 发送完成
+                gameState.sendingItems.shift();
+                saveGameState();
+                renderSendingItems();
+                elements.sendingTimer.textContent = "已完成";
+                showNotification('物品已成功发送到指定仓库', 'success');
+            }
+        }
+
+        // 一键分解
+        function decomposeItems() {
+            const selectedItems = document.querySelectorAll('.inventory-items .item-card.selected');
+            
+            if (selectedItems.length === 0) {
+                // 如果没有选择，默认分解最便宜的10个
+                const allItems = document.querySelectorAll('.inventory-items .item-card');
+                const itemsToDecompose = Array.from(allItems)
+                    .sort((a, b) => parseFloat(a.dataset.price) - parseFloat(b.dataset.price))
+                    .slice(0, 10);
+                
+                itemsToDecompose.forEach(item => item.classList.add('selected'));
+                decomposeItems(); // 递归调用
+                return;
+            }
+            
+            let totalValue = 0;
+            selectedItems.forEach(item => {
+                totalValue += parseFloat(item.dataset.price);
+                const itemName = item.dataset.name;
+                const itemPrice = parseFloat(item.dataset.price);
+                
+                // 从仓库移除
+                gameState.inventory = gameState.inventory.filter(i => !(i.name === itemName && i.price === itemPrice));
+            });
+            
+            // 添加到余额
+            gameState.balance += totalValue * 0.9; // 90%价值
+            updateBalanceDisplay();
+            
+            // 重新渲染仓库
+            renderInventory();
+            
+            // 保存游戏状态
+            saveGameState();
+            
+            showNotification(`成功分解 ${selectedItems.length} 件物品，获得 ${(totalValue * 0.9).toFixed(2)} 豆`, 'success');
+        }
+
+        // 全部置换
+        function exchangeAllItems() {
+            if (gameState.inventory.length === 0) {
+                showNotification('仓库中没有可置换的物品', 'warning');
+                return;
+            }
+            
+            const totalValue = gameState.inventory.reduce((sum, item) => sum + item.price, 0);
+            gameState.balance += totalValue;
+            gameState.inventory = [];
+            
+            updateBalanceDisplay();
+            renderInventory();
+            saveGameState();
+            
+            showNotification(`成功置换所有物品，获得 ${totalValue.toFixed(2)} 豆`, 'success');
+        }
+
+        // 取消发送
+        function cancelSending() {
+            if (gameState.sendingItems.length === 0) {
+                showNotification('没有正在发送的物品', 'warning');
+                return;
+            }
+            
+            // 将发送中的物品移回仓库
+            gameState.inventory.push(...gameState.sendingItems);
+            gameState.sendingItems = [];
+            
+            // 更新UI
+            renderInventory();
+            renderSendingItems();
+            saveGameState();
+            
+            showNotification('已取消发送，物品已返回仓库', 'success');
+        }
+
+        // 打开历史记录模态框
+        function openHistoryModal() {
+            elements.historyModal.style.display = 'flex';
+            renderRechargeHistory();
+            renderLotteryHistory();
+        }
+
+        // 渲染充值历史
+        function renderRechargeHistory() {
+            elements.rechargeHistoryTable.innerHTML = '';
+            
+            if (gameState.rechargeHistory.length === 0) {
+                elements.rechargeHistoryTable.innerHTML = '<tr><td colspan="3">暂无充值记录</td></tr>';
+                return;
+            }
+            
+            gameState.rechargeHistory.forEach(record => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${record.date}</td>
+                    <td>${record.amount.toFixed(2)}</td>
+                    <td>${record.status}</td>
+                `;
+                elements.rechargeHistoryTable.appendChild(row);
+            });
+        }
+
+        // 渲染开箱历史
+        function renderLotteryHistory() {
+            elements.lotteryHistoryTable.innerHTML = '';
+            
+            if (gameState.lotteryHistory.length === 0) {
+                elements.lotteryHistoryTable.innerHTML = '<tr><td colspan="4">暂无开箱记录</td></tr>';
+                return;
+            }
+            
+            gameState.lotteryHistory.forEach(record => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${record.date}</td>
+                    <td>${record.item}</td>
+                    <td>${record.wear}</td>
+                    <td>${record.price.toFixed(2)}</td>
+                `;
+                elements.lotteryHistoryTable.appendChild(row);
+            });
+        }
+
+        // 开始充值
+        function startRecharge() {
+            const amount = parseFloat(elements.rechargeAmount.value);
+            
+            if (isNaN(amount) || amount <= 0) {
+                showNotification('请输入有效的充值金额', 'error');
+                return;
+            }
+            
+            // 显示二维码
+            elements.qrCode.style.display = 'block';
+            elements.rechargeAfterButtons.style.display = 'flex';
+            elements.rechargeConfirm.style.display = 'none';
+            elements.rechargeCancel.style.display = 'none';
+        }
+
+        // 完成充值
+        function completeRecharge() {
+            const amount = parseFloat(elements.rechargeAmount.value);
+            
+            // 添加到余额
+            gameState.balance += amount;
+            
+            // 添加到充值历史
+            gameState.rechargeHistory.push({
+                date: new Date().toLocaleString(),
+                amount: amount,
+                status: '成功'
+            });
+            
+            // 更新UI
+            updateBalanceDisplay();
+            elements.rechargeModal.style.display = 'none';
+            elements.qrCode.style.display = 'none';
+            elements.rechargeAfterButtons.style.display = 'none';
+            elements.rechargeConfirm.style.display = 'block';
+            elements.rechargeCancel.style.display = 'block';
+            elements.rechargeAmount.value = '';
+            
+            // 保存游戏状态
+            saveGameState();
+            
+            showNotification(`充值成功！已添加 ${amount.toFixed(2)} 豆到您的账户`, 'success');
+        }
+
+        // 处理充值问题
+        function handleRechargeProblem() {
+            elements.rechargeFeedback.style.display = 'block';
+            
+            setTimeout(() => {
+                elements.rechargeFeedback.style.display = 'none';
+                completeRecharge(); // 无论如何都完成充值
+            }, 10000); // 10秒后自动完成
+        }
+
+        // 保存游戏状态
+        function saveGameState() {
+            localStorage.setItem('csgoCaseGameState', JSON.stringify(gameState));
+        }
+
+        // 初始化游戏
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>
